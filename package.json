@@ -1,0 +1,31 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:lucas6g/warzone-tournaments-backend.git",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p tsconfig-build.json",
+    "start": "node dist/main/server.js",
+    "test": "jest --passWithNoTests --no-cache --runInBand",
+    "test:whatch": "yarn test -- --whatch",
+    "test:coverage": "yarn test -- --coverage"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.4",
+    "@types/module-alias": "^2.0.1",
+    "@types/node": "^18.0.3",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard-with-typescript": "^21.0.1",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "jest": "^28.1.2",
+    "ts-jest": "^28.0.5",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "module-alias": "^2.2.2"
+  }
+}
