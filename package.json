@@ -1,7 +1,14 @@
 {
-  "name": "app",
-  "version": "1.0.0",
+  "name": "warzone-tournaments-backend",
+  "version": "0.0.1",
   "main": "index.js",
+  "keywords": [
+    "node"
+  ],
+  "author": {
+    "name": "Lucas Liduvino Santos",
+    "email": "lucas.trabalho1533@gmail.com"
+  },
   "repository": "git@github.com:lucas6g/warzone-tournaments-backend.git",
   "license": "MIT",
   "scripts": {
