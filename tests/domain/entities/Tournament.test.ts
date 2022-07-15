@@ -1,4 +1,4 @@
-import { Tournament } from '@/main/domain/entities/Tournament'
+import { Tournament } from '@/domain/entities/Tournament'
 
 describe('Tournament', () => {
   it('should create a Tournament', () => {
