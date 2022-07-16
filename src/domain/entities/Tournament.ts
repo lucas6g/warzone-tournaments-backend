@@ -1,5 +1,5 @@
 
-import { InvalidDateError } from '@/domain/errors/InvalidStartAtDateAtError'
+import { InvalidPreviosDateError } from '@/domain/errors/InvalidPreviosDateError'
 
 export class Tournament {
   private readonly id: string
@@ -16,8 +16,8 @@ export class Tournament {
     killDeathRatioLimit: number
 
   ) {
-    if (!this.isValidDate(startAt)) {
-      throw new InvalidDateError('Invalid date')
+    if (!this.isValidDate(startAt) || !this.isValidDate(endAt)) {
+      throw new InvalidPreviosDateError('Invalid previos date')
     }
     this.id = id
     this.startAt = startAt
@@ -31,9 +31,10 @@ export class Tournament {
   }
 
   isValidDate (date: Date, today: Date = new Date(Date.now())): boolean {
-    if (date.getTime() < today.getTime()) {
-      return false
+    const isPreviosDate = date.getTime() > today.getTime()
+    if (isPreviosDate) {
+      return true
     }
-    return true
+    return false
   }
 }
