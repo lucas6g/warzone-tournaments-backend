@@ -1,4 +1,5 @@
 
+import { Game } from '@/domain/entities/Game'
 import { InvalidPreviosDateError } from '@/domain/errors/InvalidPreviosDateError'
 
 export class Tournament {
@@ -7,13 +8,15 @@ export class Tournament {
   private readonly endAt: Date
   private readonly registrationCoust: number
   private readonly killDeathRatioLimit: number
+  private readonly game: Game
 
   constructor (
     id: string,
     startAt: Date,
     endAt: Date,
     registrationCoust: number,
-    killDeathRatioLimit: number
+    killDeathRatioLimit: number,
+    game: Game
 
   ) {
     if (!this.isValidDate(startAt) || !this.isValidDate(endAt)) {
@@ -24,6 +27,7 @@ export class Tournament {
     this.endAt = endAt
     this.registrationCoust = registrationCoust
     this.killDeathRatioLimit = killDeathRatioLimit
+    this.game = game
   }
 
   getPrize (): number {
@@ -36,5 +40,9 @@ export class Tournament {
       return false
     }
     return true
+  }
+
+  getGame (): Game {
+    return this.game
   }
 }
