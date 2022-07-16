@@ -31,10 +31,10 @@ export class Tournament {
   }
 
   isValidDate (date: Date, today: Date = new Date(Date.now())): boolean {
-    const isPreviosDate = date.getTime() > today.getTime()
-    if (isPreviosDate) {
-      return true
+    const isPastDate = date.getTime() < today.getTime()
+    if (isPastDate) {
+      return false
     }
-    return false
+    return true
   }
 }
