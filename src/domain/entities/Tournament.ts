@@ -1,4 +1,5 @@
-import Game from '@/domain/entities/Game'
+
+import { InvalidDateError } from '@/domain/errors/InvalidStartAtDateAtError'
 
 export class Tournament {
   private readonly id: string
@@ -6,29 +7,33 @@ export class Tournament {
   private readonly endAt: Date
   private readonly registrationCoust: number
   private readonly killDeathRatioLimit: number
-  private readonly game: Game
 
   constructor (
     id: string,
     startAt: Date,
     endAt: Date,
     registrationCoust: number,
-    killDeathRatioLimit: number,
-    game: Game
+    killDeathRatioLimit: number
+
   ) {
+    if (!this.isValidDate(startAt)) {
+      throw new InvalidDateError('Invalid date')
+    }
     this.id = id
     this.startAt = startAt
     this.endAt = endAt
     this.registrationCoust = registrationCoust
     this.killDeathRatioLimit = killDeathRatioLimit
-    this.game = game
   }
 
   getPrize (): number {
     return 0
   }
 
-  getGame (): Game {
-    return this.game
+  isValidDate (date: Date, today: Date = new Date(Date.now())): boolean {
+    if (date.getTime() < today.getTime()) {
+      return false
+    }
+    return true
   }
 }
