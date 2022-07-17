@@ -1,5 +1,7 @@
 
 import { Game } from '@/domain/entities/Game'
+import { Team } from '@/domain/entities/Team'
+import { TeamSubscription } from '@/domain/entities/TeamSubscriction'
 import { InvalidPreviosDateError } from '@/domain/errors/InvalidPreviosDateError'
 
 export class Tournament {
@@ -9,6 +11,7 @@ export class Tournament {
   private readonly registrationCoust: number
   private readonly killDeathRatioLimit: number
   private readonly game: Game
+  private readonly teamSubscriptions: TeamSubscription[]
 
   constructor (
     id: string,
@@ -28,10 +31,20 @@ export class Tournament {
     this.registrationCoust = registrationCoust
     this.killDeathRatioLimit = killDeathRatioLimit
     this.game = game
+    this.teamSubscriptions = []
   }
 
   getPrize (): number {
-    return 0
+    let prize = 0
+
+    for (const teamSubscription of this.teamSubscriptions) {
+      prize += teamSubscription.calculateTotal(this.registrationCoust)
+    }
+    return prize
+  }
+
+  subscribeTeam (team: Team, date: Date = new Date(Date.now())): void {
+    this.teamSubscriptions.push(new TeamSubscription(team, date))
   }
 
   isValidDate (date: Date, today: Date = new Date(Date.now())): boolean {
