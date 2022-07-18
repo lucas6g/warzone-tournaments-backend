@@ -37,19 +37,24 @@ export class Tournament {
 
   getPrize (): number {
     let prize = 0
-
     for (const teamSubscription of this.teamSubscriptions) {
       prize += teamSubscription.calculateTotal(this.registrationCoust)
     }
     return prize
   }
 
-  subscribeTeam (team: Team, date: Date = new Date(Date.now())): void {
+  subscribeTeam (team: Team, susbcriptionDate: Date = new Date(Date.now())): void {
     if (team.getTotalPlayers() !== this.game.getGameType()) {
       throw new TournamentError('number of team players is different from the type of game')
     }
+    if (this.isDuringTournamentPeriod(susbcriptionDate)) {
+      throw new TournamentError('subscription denied tournament is already in progress')
+    }
+    this.teamSubscriptions.push(new TeamSubscription(team, susbcriptionDate))
+  }
 
-    this.teamSubscriptions.push(new TeamSubscription(team, date))
+  private isDuringTournamentPeriod (susbcriptionDate: Date): boolean {
+    return susbcriptionDate.getTime() >= this.startAt.getTime() && susbcriptionDate.getTime() <= this.endAt.getTime()
   }
 
   isValidDate (date: Date, today: Date = new Date(Date.now())): boolean {
