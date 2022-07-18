@@ -1,4 +1,3 @@
-
 export class Team {
   private readonly id: string
   private readonly name: string
