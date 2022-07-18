@@ -1,3 +1,5 @@
+import { Player } from '@/domain/entities/Player'
+
 export class Team {
   private readonly id: string
   private readonly name: string
@@ -15,5 +17,13 @@ export class Team {
 
   getTotalPlayers (): number {
     return 3
+  }
+
+  getPlayers (): Player[] {
+    const player1 = new Player(1.25)
+    const player2 = new Player(1.12)
+    const player3 = new Player(1.11)
+
+    return [player1, player2, player3]
   }
 }

@@ -60,6 +60,13 @@ export class Tournament {
     if (isAfterTournamentEnds) {
       throw new TournamentError('subscription denied tournament is over')
     }
+
+    if (this.hasTeamMemberKdGreaterThankillDeathRatioLimit(team)) {
+      throw new TournamentError(
+        'subscription denied team member kd level is bigger than Tounament killDeathRatioLimit'
+      )
+    }
+
     this.teamSubscriptions.push(new TeamSubscription(team, susbcriptionDate))
   }
 
@@ -68,6 +75,14 @@ export class Tournament {
       susbcriptionDate.getTime() >= this.startAt.getTime() &&
       susbcriptionDate.getTime() <= this.endAt.getTime()
     )
+  }
+
+  private hasTeamMemberKdGreaterThankillDeathRatioLimit (team: Team): boolean {
+    const players = team
+      .getPlayers()
+      .filter(player => player.getKdLevel() > this.killDeathRatioLimit)
+
+    return players.length > 0
   }
 
   isValidDate (date: Date, today: Date = new Date(Date.now())): boolean {
