@@ -3,6 +3,7 @@ import { Game } from '@/domain/entities/Game'
 import { Team } from '@/domain/entities/Team'
 import { TeamSubscription } from '@/domain/entities/TeamSubscriction'
 import { InvalidPreviosDateError } from '@/domain/errors/InvalidPreviosDateError'
+import { TournamentError } from '@/domain/errors/TournamentError'
 
 export class Tournament {
   private readonly id: string
@@ -44,6 +45,10 @@ export class Tournament {
   }
 
   subscribeTeam (team: Team, date: Date = new Date(Date.now())): void {
+    if (team.getTotalPlayers() !== this.game.getGameType()) {
+      throw new TournamentError('number of team players is different from the type of game')
+    }
+
     this.teamSubscriptions.push(new TeamSubscription(team, date))
   }
 
