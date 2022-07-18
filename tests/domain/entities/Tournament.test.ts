@@ -49,4 +49,10 @@ describe('Tournament', () => {
 
     expect(() => sut.subscribeTeam(team)).toThrow(new TournamentError('number of team players is different from the type of game'))
   })
+  it('should not subscribe a Team to a Tournament during the Tournament period', () => {
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date('2022-07-15T17:15:00').getTime()
+    })
+    expect(() => sut.subscribeTeam(team)).toThrow(new TournamentError('subscription denied tournament is already in progress'))
+  })
 })
