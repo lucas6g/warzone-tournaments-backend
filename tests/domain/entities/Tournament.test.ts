@@ -1,4 +1,5 @@
 import { Game } from '@/domain/entities/Game'
+import { Player } from '@/domain/entities/Player'
 import { Team } from '@/domain/entities/Team'
 import { Tournament } from '@/domain/entities/Tournament'
 import { GameType } from '@/domain/enums/GameType'
@@ -80,6 +81,21 @@ describe('Tournament', () => {
     })
     expect(() => sut.subscribeTeam(team)).toThrow(
       new TournamentError('subscription denied tournament is over')
+    )
+  })
+  it('should not subscribe a Team to a Tournament if team member kd level is bigger than Tounament killDeathRatioLimit ', () => {
+    const player1 = new Player(1.51)
+    const player2 = new Player(1.12)
+    const player3 = new Player(1.11)
+
+    jest
+      .spyOn(team, 'getPlayers')
+      .mockReturnValueOnce([player1, player2, player3])
+
+    expect(() => sut.subscribeTeam(team)).toThrow(
+      new TournamentError(
+        'subscription denied team member kd level is bigger than Tounament killDeathRatioLimit'
+      )
     )
   })
 })
