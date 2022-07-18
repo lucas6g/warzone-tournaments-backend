@@ -74,4 +74,12 @@ describe('Tournament', () => {
       )
     )
   })
+  it('should not subscribe a Team to a Tournament when the Tournament is over', () => {
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date('2022-07-15T19:15:00').getTime()
+    })
+    expect(() => sut.subscribeTeam(team)).toThrow(
+      new TournamentError('subscription denied tournament is over')
+    )
+  })
 })
