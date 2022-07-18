@@ -2,7 +2,9 @@
 import { Game } from '@/domain/entities/Game'
 import { Team } from '@/domain/entities/Team'
 import { Tournament } from '@/domain/entities/Tournament'
+import { GameType } from '@/domain/enums/GameType'
 import { InvalidPreviosDateError } from '@/domain/errors/InvalidPreviosDateError'
+import { TournamentError } from '@/domain/errors/TournamentError'
 
 describe('Tournament', () => {
   let sut: Tournament
@@ -11,7 +13,8 @@ describe('Tournament', () => {
   let endAt: Date
 
   beforeEach(() => {
-    game = new Game('anyGameId', 'anyGameName', 'anyGameType', 'anyGameImage', 'anyGameMode')
+    game = new Game('anyGameId', 'anyGameName', GameType.TRIOS, 'anyGameImage', 'anyGameMode')
+
     jest.spyOn(Date, 'now').mockImplementation(() => {
       return new Date('2022-07-15T14:00:00').getTime()
     })
@@ -39,5 +42,11 @@ describe('Tournament', () => {
     sut.subscribeTeam(new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo'))
 
     expect(sut.getPrize()).toBe(15)
+  })
+  it('should not subscribe a Team to a Tournament if number of players is different from the type of game', () => {
+    const team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo')
+    jest.spyOn(team, 'getTotalPlayers').mockReturnValueOnce(4)
+
+    expect(() => sut.subscribeTeam(team)).toThrow(new TournamentError('number of team players is different from the type of game'))
   })
 })
