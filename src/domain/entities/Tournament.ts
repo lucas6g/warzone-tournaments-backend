@@ -55,6 +55,11 @@ export class Tournament {
         'subscription denied tournament is already in progress'
       )
     }
+    const isAfterTournamentEnds =
+      susbcriptionDate.getTime() >= this.endAt.getTime()
+    if (isAfterTournamentEnds) {
+      throw new TournamentError('subscription denied tournament is over')
+    }
     this.teamSubscriptions.push(new TeamSubscription(team, susbcriptionDate))
   }
 
