@@ -98,4 +98,13 @@ describe('Tournament', () => {
       )
     )
   })
+  it('should return the number of teams registered in the Tournament', () => {
+    sut.subscribeTeam(team)
+    sut.subscribeTeam(team)
+    sut.subscribeTeam(team)
+
+    const numberOfTeamsRegistered = sut.getNumberOfTeamsRegistered()
+
+    expect(numberOfTeamsRegistered).toBe(3)
+  })
 })
