@@ -20,11 +20,9 @@ export class Tournament {
   }
 
   getPrize (): number {
-    let prize = 0
-    for (const teamSubscription of this.teamSubscriptions) {
-      prize += teamSubscription.calculateTotal(this.registrationCoust)
-    }
-    return prize
+    return this.teamSubscriptions.reduce((total, teamSubscription) => {
+      return total + teamSubscription.calculateTotal(this.registrationCoust)
+    }, 0)
   }
 
   subscribeTeam (
