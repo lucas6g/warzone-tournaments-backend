@@ -5,32 +5,18 @@ import { InvalidPreviosDateError } from '@/domain/errors/InvalidPreviosDateError
 import { TournamentError } from '@/domain/errors/TournamentError'
 
 export class Tournament {
-  private readonly id: string
-  private readonly startAt: Date
-  private readonly endAt: Date
-  private readonly registrationCoust: number
-  private readonly killDeathRatioLimit: number
-  private readonly game: Game
-  private readonly teamSubscriptions: TeamSubscription[]
-
   constructor (
-    id: string,
-    startAt: Date,
-    endAt: Date,
-    registrationCoust: number,
-    killDeathRatioLimit: number,
-    game: Game
+    private readonly id: string,
+    private readonly startAt: Date,
+    private readonly endAt: Date,
+    private readonly registrationCoust: number,
+    private readonly killDeathRatioLimit: number,
+    private readonly game: Game,
+    private readonly teamSubscriptions: TeamSubscription[] = []
   ) {
     if (!this.isValidDate(startAt) || !this.isValidDate(endAt)) {
       throw new InvalidPreviosDateError('Invalid previos date')
     }
-    this.id = id
-    this.startAt = startAt
-    this.endAt = endAt
-    this.registrationCoust = registrationCoust
-    this.killDeathRatioLimit = killDeathRatioLimit
-    this.game = game
-    this.teamSubscriptions = []
   }
 
   getPrize (): number {
