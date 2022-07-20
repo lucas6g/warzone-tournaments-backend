@@ -51,7 +51,9 @@ export class Tournament {
       )
     }
 
-    this.teamSubscriptions.push(new TeamSubscription(team, susbcriptionDate))
+    this.teamSubscriptions.push(
+      new TeamSubscription(team, susbcriptionDate, this)
+    )
   }
 
   private isDuringTournamentPeriod (susbcriptionDate: Date): boolean {
@@ -83,5 +85,9 @@ export class Tournament {
 
   getGame (): Game {
     return this.game
+  }
+
+  getRegistrationCoust (): number {
+    return this.registrationCoust
   }
 }
