@@ -1,6 +1,6 @@
 import { Game } from '@/domain/entities/Game'
 import { Team } from '@/domain/entities/Team'
-import { TeamSubscription } from '@/domain/entities/TeamSubscriction'
+import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 import { Tournament } from '@/domain/entities/Tournament'
 import { GameType } from '@/domain/enums/GameType'
 

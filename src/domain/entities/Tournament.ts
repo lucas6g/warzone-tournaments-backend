@@ -1,6 +1,6 @@
 import { Game } from '@/domain/entities/Game'
 import { Team } from '@/domain/entities/Team'
-import { TeamSubscription } from '@/domain/entities/TeamSubscriction'
+import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 import { InvalidPreviosDateError } from '@/domain/errors/InvalidPreviosDateError'
 import { TournamentError } from '@/domain/errors/TournamentError'
 
