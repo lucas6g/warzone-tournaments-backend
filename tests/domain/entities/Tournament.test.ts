@@ -14,6 +14,10 @@ describe('Tournament', () => {
   let team: Team
 
   beforeEach(() => {
+    team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo')
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date('2022-07-15T14:00:00').getTime()
+    })
     game = new Game(
       'anyGameId',
       'anyGameName',
@@ -21,10 +25,6 @@ describe('Tournament', () => {
       'anyGameImage',
       'anyGameMode'
     )
-    team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo')
-    jest.spyOn(Date, 'now').mockImplementation(() => {
-      return new Date('2022-07-15T14:00:00').getTime()
-    })
     startAt = new Date('2022-07-15T17:00:00')
     endAt = new Date('2022-07-15T19:00:00')
     sut = new Tournament('anyTournomentId', startAt, endAt, 5, 1.5, game)
@@ -106,5 +106,10 @@ describe('Tournament', () => {
     const numberOfTeamsRegistered = sut.getNumberOfTeamsRegistered()
 
     expect(numberOfTeamsRegistered).toBe(3)
+  })
+  it('should return the registrationCoust', () => {
+    const registrationCoust = sut.getRegistrationCoust()
+
+    expect(registrationCoust).toBe(5)
   })
 })
