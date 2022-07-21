@@ -1,14 +1,59 @@
 import { Team } from '@/domain/entities/Team'
 import { Tournament } from '@/domain/entities/Tournament'
+import { TeamSubscriptionError } from '@/domain/errors/TeamSubscriptionError'
 
 export class TeamSubscription {
-  private readonly tournament: Tournament
-  private readonly team: Team
-  private readonly date: Date
-  constructor (team: Team, date: Date, tournament: Tournament) {
+  constructor (
+    private readonly tournament: Tournament,
+    private readonly team: Team,
+    private readonly date: Date = new Date(Date.now())
+  ) {
+    if (team.getTotalPlayers() !== tournament.getGame().getGameType()) {
+      throw new TeamSubscriptionError(
+        'number of team players is different from the type of game'
+      )
+    }
+    if (this.isDuringTournamentPeriod(tournament, date)) {
+      throw new TeamSubscriptionError(
+        'subscription denied tournament is already in progress'
+      )
+    }
+    const isAfterTournamentEnds =
+      date.getTime() >= tournament.getEndAt().getTime()
+    if (isAfterTournamentEnds) {
+      throw new TeamSubscriptionError('subscription denied tournament is over')
+    }
+    if (this.hasTeamMemberKdGreaterThankillDeathRatioLimit(tournament, team)) {
+      throw new TeamSubscriptionError(
+        'subscription denied team member kd level is bigger than Tounament killDeathRatioLimit'
+      )
+    }
+    this.tournament = tournament
     this.team = team
     this.date = date
-    this.tournament = tournament
+  }
+
+  private isDuringTournamentPeriod (
+    tournament: Tournament,
+    susbcriptionDate: Date
+  ): boolean {
+    return (
+      susbcriptionDate.getTime() >= tournament.getStartAt().getTime() &&
+      susbcriptionDate.getTime() <= tournament.getEndAt().getTime()
+    )
+  }
+
+  private hasTeamMemberKdGreaterThankillDeathRatioLimit (
+    tournament: Tournament,
+    team: Team
+  ): boolean {
+    const players = team
+      .getPlayers()
+      .filter(
+        player => player.getKdLevel() > tournament.getkillDeathRatioLimit()
+      )
+
+    return players.length > 0
   }
 
   getTeam (): Team {

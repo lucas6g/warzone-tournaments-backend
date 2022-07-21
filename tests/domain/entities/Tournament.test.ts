@@ -1,10 +1,10 @@
 import { Game } from '@/domain/entities/Game'
-import { Player } from '@/domain/entities/Player'
+
 import { Team } from '@/domain/entities/Team'
+import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 import { Tournament } from '@/domain/entities/Tournament'
 import { GameType } from '@/domain/enums/GameType'
 import { InvalidPreviosDateError } from '@/domain/errors/InvalidPreviosDateError'
-import { TournamentError } from '@/domain/errors/TournamentError'
 
 describe('Tournament', () => {
   let sut: Tournament
@@ -12,6 +12,7 @@ describe('Tournament', () => {
   let startAt: Date
   let endAt: Date
   let team: Team
+  let teamSubscription: TeamSubscription
 
   beforeEach(() => {
     team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo')
@@ -25,9 +26,11 @@ describe('Tournament', () => {
       'anyGameImage',
       'anyGameMode'
     )
+
     startAt = new Date('2022-07-15T17:00:00')
     endAt = new Date('2022-07-15T19:00:00')
     sut = new Tournament('anyTournomentId', startAt, endAt, 5, 1.5, game)
+    teamSubscription = new TeamSubscription(sut, team)
   })
   it('should create a Tournament with a game', () => {
     expect(sut.getPrize()).toBe(0)
@@ -51,57 +54,16 @@ describe('Tournament', () => {
         new Tournament('anyTournomentId', startAt, pastEndAtDate, 5, 1.5, game)
     ).toThrow(new InvalidPreviosDateError('Invalid previos date'))
   })
-  it('should subscribe a Team to a Tournament', () => {
-    sut.subscribeTeam(team)
+  it('should add TeamSubscription to tournament', () => {
+    sut.addSubscription(teamSubscription)
 
     expect(sut.getPrize()).toBe(15)
   })
-  it('should not subscribe a Team to a Tournament if number of players is different from the type of game', () => {
-    jest.spyOn(team, 'getTotalPlayers').mockReturnValueOnce(4)
 
-    expect(() => sut.subscribeTeam(team)).toThrow(
-      new TournamentError(
-        'number of team players is different from the type of game'
-      )
-    )
-  })
-  it('should not subscribe a Team to a Tournament during the Tournament period', () => {
-    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
-      return new Date('2022-07-15T17:15:00').getTime()
-    })
-    expect(() => sut.subscribeTeam(team)).toThrow(
-      new TournamentError(
-        'subscription denied tournament is already in progress'
-      )
-    )
-  })
-  it('should not subscribe a Team to a Tournament when the Tournament is over', () => {
-    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
-      return new Date('2022-07-15T19:15:00').getTime()
-    })
-    expect(() => sut.subscribeTeam(team)).toThrow(
-      new TournamentError('subscription denied tournament is over')
-    )
-  })
-  it('should not subscribe a Team to a Tournament if team member kd level is bigger than Tounament killDeathRatioLimit ', () => {
-    const player1 = new Player(1.51)
-    const player2 = new Player(1.12)
-    const player3 = new Player(1.11)
-
-    jest
-      .spyOn(team, 'getPlayers')
-      .mockReturnValueOnce([player1, player2, player3])
-
-    expect(() => sut.subscribeTeam(team)).toThrow(
-      new TournamentError(
-        'subscription denied team member kd level is bigger than Tounament killDeathRatioLimit'
-      )
-    )
-  })
-  it('should return the number of teams registered in the Tournament', () => {
-    sut.subscribeTeam(team)
-    sut.subscribeTeam(team)
-    sut.subscribeTeam(team)
+  it('should return the number of subscriptions registered in the Tournament', () => {
+    sut.addSubscription(teamSubscription)
+    sut.addSubscription(teamSubscription)
+    sut.addSubscription(teamSubscription)
 
     const numberOfTeamsRegistered = sut.getNumberOfTeamsRegistered()
 

@@ -1,8 +1,10 @@
 import { Game } from '@/domain/entities/Game'
+import { Player } from '@/domain/entities/Player'
 import { Team } from '@/domain/entities/Team'
 import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 import { Tournament } from '@/domain/entities/Tournament'
 import { GameType } from '@/domain/enums/GameType'
+import { TeamSubscriptionError } from '@/domain/errors/TeamSubscriptionError'
 
 describe('TeamSubscription', () => {
   let sut: TeamSubscription
@@ -30,11 +32,7 @@ describe('TeamSubscription', () => {
       )
     )
 
-    sut = new TeamSubscription(
-      team,
-      new Date('2022-07-15T14:00:00'),
-      tournament
-    )
+    sut = new TeamSubscription(tournament, team)
   })
 
   it('should create a TeamSubscription', () => {
@@ -43,5 +41,46 @@ describe('TeamSubscription', () => {
     expect(sut.getTeam()).toEqual(team)
     expect(sut.getTournament()).toEqual(tournament)
     expect(total).toBe(15)
+  })
+  it('should not subscribe a Team to a Tournament if number of players is different from the GameType', () => {
+    jest.spyOn(team, 'getTotalPlayers').mockReturnValueOnce(4)
+    expect(() => new TeamSubscription(tournament, team)).toThrow(
+      new TeamSubscriptionError(
+        'number of team players is different from the type of game'
+      )
+    )
+  })
+  it('should not subscribe a Team to a Tournament during the Tournament period', () => {
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date('2022-07-15T17:15:00').getTime()
+    })
+    expect(() => new TeamSubscription(tournament, team)).toThrow(
+      new TeamSubscriptionError(
+        'subscription denied tournament is already in progress'
+      )
+    )
+  })
+  it('should not subscribe a Team to a Tournament when the Tournament is over', () => {
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date('2022-07-15T19:15:00').getTime()
+    })
+    expect(() => new TeamSubscription(tournament, team)).toThrow(
+      new TeamSubscriptionError('subscription denied tournament is over')
+    )
+  })
+  it('should not subscribe a Team to a Tournament if team member kd level is bigger than Tounament killDeathRatioLimit ', () => {
+    const player1 = new Player(1.51)
+    const player2 = new Player(1.12)
+    const player3 = new Player(1.11)
+
+    jest
+      .spyOn(team, 'getPlayers')
+      .mockReturnValueOnce([player1, player2, player3])
+
+    expect(() => new TeamSubscription(tournament, team)).toThrow(
+      new TeamSubscriptionError(
+        'subscription denied team member kd level is bigger than Tounament killDeathRatioLimit'
+      )
+    )
   })
 })
