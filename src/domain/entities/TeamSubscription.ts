@@ -1,3 +1,4 @@
+import { Payment } from '@/domain/entities/Payment'
 import { Team } from '@/domain/entities/Team'
 import { Tournament } from '@/domain/entities/Tournament'
 import { TeamSubscriptionError } from '@/domain/errors/TeamSubscriptionError'
@@ -6,6 +7,7 @@ export class TeamSubscription {
   constructor (
     private readonly tournament: Tournament,
     private readonly team: Team,
+    private readonly payment: Payment,
     private readonly date: Date = new Date(Date.now())
   ) {
     if (team.getTotalPlayers() !== tournament.getGame().getGameType()) {
@@ -28,7 +30,15 @@ export class TeamSubscription {
         'subscription denied team member kd level is bigger than Tounament killDeathRatioLimit'
       )
     }
+
+    if (payment.getStatus() !== 'PAID') {
+      throw new TeamSubscriptionError(
+        'subscription denied tournoment fee was not paid'
+      )
+    }
+
     this.tournament = tournament
+    this.payment = payment
     this.team = team
     this.date = date
   }
