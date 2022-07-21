@@ -1,9 +1,11 @@
 import { Game } from '@/domain/entities/Game'
+import { Payment } from '@/domain/entities/Payment'
 
 import { Team } from '@/domain/entities/Team'
 import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 import { Tournament } from '@/domain/entities/Tournament'
 import { GameType } from '@/domain/enums/GameType'
+import { PaymentStatus } from '@/domain/enums/PaymentStatus'
 import { InvalidPreviosDateError } from '@/domain/errors/InvalidPreviosDateError'
 
 describe('Tournament', () => {
@@ -12,6 +14,7 @@ describe('Tournament', () => {
   let startAt: Date
   let endAt: Date
   let team: Team
+  let payment: Payment
   let teamSubscription: TeamSubscription
 
   beforeEach(() => {
@@ -26,11 +29,12 @@ describe('Tournament', () => {
       'anyGameImage',
       'anyGameMode'
     )
-
     startAt = new Date('2022-07-15T17:00:00')
     endAt = new Date('2022-07-15T19:00:00')
     sut = new Tournament('anyTournomentId', startAt, endAt, 5, 1.5, game)
-    teamSubscription = new TeamSubscription(sut, team)
+    payment = new Payment()
+    jest.spyOn(payment, 'getStatus').mockReturnValue(PaymentStatus.PAID)
+    teamSubscription = new TeamSubscription(sut, team, payment)
   })
   it('should create a Tournament with a game', () => {
     expect(sut.getPrize()).toBe(0)
