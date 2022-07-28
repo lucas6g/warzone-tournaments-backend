@@ -6,6 +6,7 @@ import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 import { Tournament } from '@/domain/entities/Tournament'
 import { GameType } from '@/domain/enums/GameType'
 import { PaymentStatus } from '@/domain/enums/PaymentStatus'
+import { PlayerRole } from '@/domain/enums/PlayerRole'
 import { TeamSubscriptionError } from '@/domain/errors/TeamSubscriptionError'
 
 describe('TeamSubscription', () => {
@@ -73,9 +74,39 @@ describe('TeamSubscription', () => {
     )
   })
   it('should not subscribe a Team to a Tournament if team member kd level is bigger than Tounament killDeathRatioLimit ', () => {
-    const player1 = new Player(1.51)
-    const player2 = new Player(1.12)
-    const player3 = new Player(1.11)
+    const player1 = new Player(
+      'anyId',
+      'anyName',
+      'anyEmail',
+      'anyPassword',
+      1.51,
+      'anyPixkey',
+      PlayerRole.COMMON,
+      'anyGamerTag',
+      'anyPlatForm'
+    )
+    const player2 = new Player(
+      'anyId',
+      'anyName',
+      'anyEmail',
+      'anyPassword',
+      1.12,
+      'anyPixkey',
+      PlayerRole.COMMON,
+      'anyGamerTag',
+      'anyPlatForm'
+    )
+    const player3 = new Player(
+      'anyId',
+      'anyName',
+      'anyEmail',
+      'anyPassword',
+      1.11,
+      'anyPixkey',
+      PlayerRole.COMMON,
+      'anyGamerTag',
+      'anyPlatForm'
+    )
 
     jest
       .spyOn(team, 'getPlayers')
