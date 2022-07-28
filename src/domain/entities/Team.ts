@@ -6,12 +6,18 @@ export class Team {
   private readonly playerId: string
   private readonly name: string
   private readonly logo: string
+  private readonly players: Player[]
 
   constructor (id: string, name: string, logo: string, playerId: string) {
     this.id = id
     this.name = name
     this.logo = logo
     this.playerId = playerId
+    this.players = []
+  }
+
+  addPlayer (player: Player): void {
+    this.players.push(player)
   }
 
   getId (): string {
@@ -19,7 +25,7 @@ export class Team {
   }
 
   getTotalPlayers (): number {
-    return 3
+    return this.players.length
   }
 
   getPlayers (): Player[] {
