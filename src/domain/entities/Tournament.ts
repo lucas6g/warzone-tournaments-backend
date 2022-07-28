@@ -1,8 +1,6 @@
 import { Game } from '@/domain/entities/Game'
-import { Team } from '@/domain/entities/Team'
-import { TeamSubscription } from '@/domain/entities/TeamSubscriction'
+import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 import { InvalidPreviosDateError } from '@/domain/errors/InvalidPreviosDateError'
-import { TournamentError } from '@/domain/errors/TournamentError'
 
 export class Tournament {
   constructor (
@@ -25,48 +23,8 @@ export class Tournament {
     }, 0)
   }
 
-  subscribeTeam (
-    team: Team,
-    susbcriptionDate: Date = new Date(Date.now())
-  ): void {
-    if (team.getTotalPlayers() !== this.game.getGameType()) {
-      throw new TournamentError(
-        'number of team players is different from the type of game'
-      )
-    }
-    if (this.isDuringTournamentPeriod(susbcriptionDate)) {
-      throw new TournamentError(
-        'subscription denied tournament is already in progress'
-      )
-    }
-    const isAfterTournamentEnds =
-      susbcriptionDate.getTime() >= this.endAt.getTime()
-    if (isAfterTournamentEnds) {
-      throw new TournamentError('subscription denied tournament is over')
-    }
-
-    if (this.hasTeamMemberKdGreaterThankillDeathRatioLimit(team)) {
-      throw new TournamentError(
-        'subscription denied team member kd level is bigger than Tounament killDeathRatioLimit'
-      )
-    }
-
-    this.teamSubscriptions.push(new TeamSubscription(team, susbcriptionDate))
-  }
-
-  private isDuringTournamentPeriod (susbcriptionDate: Date): boolean {
-    return (
-      susbcriptionDate.getTime() >= this.startAt.getTime() &&
-      susbcriptionDate.getTime() <= this.endAt.getTime()
-    )
-  }
-
-  private hasTeamMemberKdGreaterThankillDeathRatioLimit (team: Team): boolean {
-    const players = team
-      .getPlayers()
-      .filter(player => player.getKdLevel() > this.killDeathRatioLimit)
-
-    return players.length > 0
+  addSubscription (susbcription: TeamSubscription): void {
+    this.teamSubscriptions.push(susbcription)
   }
 
   getNumberOfTeamsRegistered (): number {
@@ -83,5 +41,21 @@ export class Tournament {
 
   getGame (): Game {
     return this.game
+  }
+
+  getRegistrationCoust (): number {
+    return this.registrationCoust
+  }
+
+  getStartAt (): Date {
+    return this.startAt
+  }
+
+  getEndAt (): Date {
+    return this.endAt
+  }
+
+  getkillDeathRatioLimit (): number {
+    return this.killDeathRatioLimit
   }
 }
