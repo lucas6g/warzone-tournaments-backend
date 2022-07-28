@@ -21,6 +21,7 @@ describe('TeamSubscription', () => {
     })
 
     team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo', 'playerId')
+    jest.spyOn(team, 'getTotalPlayers').mockReturnValue(3)
     tournament = new Tournament(
       'anyTournomentId',
       new Date('2022-07-15T17:00:00'),
