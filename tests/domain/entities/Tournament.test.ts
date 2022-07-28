@@ -18,7 +18,7 @@ describe('Tournament', () => {
   let teamSubscription: TeamSubscription
 
   beforeEach(() => {
-    team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo')
+    team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo', 'anyPlayerId')
     jest.spyOn(Date, 'now').mockImplementation(() => {
       return new Date('2022-07-15T14:00:00').getTime()
     })

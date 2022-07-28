@@ -20,7 +20,7 @@ describe('TeamSubscription', () => {
       return new Date('2022-07-15T14:00:00').getTime()
     })
 
-    team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo')
+    team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo', 'playerId')
     tournament = new Tournament(
       'anyTournomentId',
       new Date('2022-07-15T17:00:00'),
