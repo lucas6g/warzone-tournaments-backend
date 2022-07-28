@@ -1,11 +1,23 @@
-export class Player {
-  private readonly kdLevel: number
+import { PlayerRole } from '@/domain/enums/PlayerRole'
 
-  constructor (kdLevel: number) {
-    this.kdLevel = kdLevel
-  }
+export class Player {
+  constructor (
+    private readonly id: string,
+    private readonly name: string,
+    private readonly email: string,
+    private readonly password: string,
+    private readonly kdLevel: number,
+    private readonly pixKey: string,
+    private readonly playerRole: PlayerRole,
+    private readonly gamerTag: string,
+    private readonly platForm: string
+  ) {}
 
   getKdLevel (): number {
     return this.kdLevel
+  }
+
+  getName (): string {
+    return this.name
   }
 }
