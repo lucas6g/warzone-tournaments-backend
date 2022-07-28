@@ -3,13 +3,15 @@ import { PlayerRole } from '@/domain/enums/PlayerRole'
 
 export class Team {
   private readonly id: string
+  private readonly playerId: string
   private readonly name: string
   private readonly logo: string
 
-  constructor (id: string, name: string, logo: string) {
+  constructor (id: string, name: string, logo: string, playerId: string) {
     this.id = id
     this.name = name
     this.logo = logo
+    this.playerId = playerId
   }
 
   getId (): string {
@@ -56,5 +58,9 @@ export class Team {
     )
 
     return [player1, player2, player3]
+  }
+
+  getPlayerId (): string {
+    return this.playerId
   }
 }
