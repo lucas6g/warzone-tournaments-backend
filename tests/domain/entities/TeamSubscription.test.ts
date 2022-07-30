@@ -1,7 +1,7 @@
 import { Game } from '@/domain/entities/Game'
 import { Payment } from '@/domain/entities/Payment'
-import { Player } from '@/domain/entities/Player'
 import { Team } from '@/domain/entities/Team'
+import { TeamPlayer } from '@/domain/entities/TeamPlayer'
 import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 import { Tournament } from '@/domain/entities/Tournament'
 import { GameType } from '@/domain/enums/GameType'
@@ -75,42 +75,27 @@ describe('TeamSubscription', () => {
     )
   })
   it('should not subscribe a Team to a Tournament if team member kd level is bigger than Tounament killDeathRatioLimit ', () => {
-    const player1 = new Player(
-      'anyId',
-      'anyName',
-      'anyEmail',
-      'anyPassword',
-      1.51,
-      'anyPixkey',
+    const player1 = new TeamPlayer(
+      'anyPlayerId',
+      'anyTeamId',
       PlayerRole.COMMON,
-      'anyGamerTag',
-      'anyPlatForm'
+      1.51
     )
-    const player2 = new Player(
-      'anyId',
-      'anyName',
-      'anyEmail',
-      'anyPassword',
-      1.12,
-      'anyPixkey',
+    const player2 = new TeamPlayer(
+      'anyPlayerId',
+      'anyTeamId',
       PlayerRole.COMMON,
-      'anyGamerTag',
-      'anyPlatForm'
+      1.12
     )
-    const player3 = new Player(
-      'anyId',
-      'anyName',
-      'anyEmail',
-      'anyPassword',
-      1.11,
-      'anyPixkey',
+    const player3 = new TeamPlayer(
+      'anyPlayerId',
+      'anyTeamId',
       PlayerRole.COMMON,
-      'anyGamerTag',
-      'anyPlatForm'
+      1.11
     )
 
     jest
-      .spyOn(team, 'getPlayers')
+      .spyOn(team, 'getTeamPlayers')
       .mockReturnValueOnce([player1, player2, player3])
 
     expect(() => new TeamSubscription(tournament, team, payment)).toThrow(

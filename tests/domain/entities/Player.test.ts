@@ -22,4 +22,7 @@ describe('Player', () => {
     expect(sut.getKdLevel()).toBe(1.5)
     expect(sut.getName()).toBe('anyName')
   })
+  it('should get player id', () => {
+    expect(sut.getId()).toBe('anyId')
+  })
 })
