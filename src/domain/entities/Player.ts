@@ -20,4 +20,8 @@ export class Player {
   getName (): string {
     return this.name
   }
+
+  getId (): string {
+    return this.id
+  }
 }

@@ -1,22 +1,31 @@
 import { Player } from '@/domain/entities/Player'
+import { TeamPlayer } from '@/domain/entities/TeamPlayer'
+import { PlayerRole } from '@/domain/enums/PlayerRole'
 
 export class Team {
   private readonly id: string
   private readonly playerId: string
   private readonly name: string
   private readonly logo: string
-  private readonly players: Player[]
+  private readonly teamPlayers: TeamPlayer[] = []
 
   constructor (id: string, name: string, logo: string, playerId: string) {
     this.id = id
     this.name = name
     this.logo = logo
     this.playerId = playerId
-    this.players = []
+    this.teamPlayers.push(new TeamPlayer(playerId, this.id, PlayerRole.LEADER))
   }
 
   addPlayer (player: Player): void {
-    this.players.push(player)
+    this.teamPlayers.push(
+      new TeamPlayer(
+        player.getId(),
+        this.id,
+        PlayerRole.COMMON,
+        player.getKdLevel()
+      )
+    )
   }
 
   getId (): string {
@@ -24,11 +33,11 @@ export class Team {
   }
 
   getTotalPlayers (): number {
-    return this.players.length
+    return this.teamPlayers.length
   }
 
-  getPlayers (): Player[] {
-    return this.players
+  getTeamPlayers (): TeamPlayer[] {
+    return this.teamPlayers
   }
 
   getPlayerId (): string {
