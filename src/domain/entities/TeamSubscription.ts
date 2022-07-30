@@ -61,7 +61,7 @@ export class TeamSubscription {
       .getTeamPlayers()
       .filter(
         teamMember =>
-          teamMember.getKdLevel() > tournament.getkillDeathRatioLimit()
+          teamMember.getPlayerKdLevel() > tournament.getkillDeathRatioLimit()
       )
 
     return teamMember.length > 0

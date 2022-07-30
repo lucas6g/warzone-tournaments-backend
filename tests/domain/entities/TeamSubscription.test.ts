@@ -1,5 +1,6 @@
 import { Game } from '@/domain/entities/Game'
 import { Payment } from '@/domain/entities/Payment'
+import { Player } from '@/domain/entities/Player'
 import { Team } from '@/domain/entities/Team'
 import { TeamPlayer } from '@/domain/entities/TeamPlayer'
 import { TeamSubscription } from '@/domain/entities/TeamSubscription'
@@ -14,27 +15,57 @@ describe('TeamSubscription', () => {
   let team: Team
   let tournament: Tournament
   let payment: Payment
+  let commomPlayer: Player
+  let game: Game
 
   beforeEach(() => {
     jest.spyOn(Date, 'now').mockImplementation(() => {
       return new Date('2022-07-15T14:00:00').getTime()
     })
 
-    team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo', 'playerId')
+    team = new Team(
+      'anyTeamId',
+      'anyTeamName',
+      'anyTeamLogo',
+      new Player(
+        'anyId',
+        'anyName',
+        'anyEmail',
+        'anyPassword',
+        1.2,
+        'anyPixkey',
+        PlayerRole.LEADER,
+        'anyGamerTag',
+        'anyPlatForm'
+      )
+    )
+    commomPlayer = new Player(
+      'anyId',
+      'anyName',
+      'anyEmail',
+      'anyPassword',
+      1.6,
+      'anyPixkey',
+      PlayerRole.COMMON,
+      'anyGamerTag',
+      'anyPlatForm'
+    )
     jest.spyOn(team, 'getTotalPlayers').mockReturnValue(3)
+
+    game = new Game(
+      'anyGameId',
+      'anyGameName',
+      GameType.TRIOS,
+      'anyGameImage',
+      'anyGameMode'
+    )
     tournament = new Tournament(
       'anyTournomentId',
       new Date('2022-07-15T17:00:00'),
       new Date('2022-07-15T19:00:00'),
       5,
       1.5,
-      new Game(
-        'anyGameId',
-        'anyGameName',
-        GameType.TRIOS,
-        'anyGameImage',
-        'anyGameMode'
-      )
+      game
     )
     payment = new Payment()
     jest.spyOn(payment, 'getStatus').mockReturnValue(PaymentStatus.PAID)
@@ -75,28 +106,10 @@ describe('TeamSubscription', () => {
     )
   })
   it('should not subscribe a Team to a Tournament if team member kd level is bigger than Tounament killDeathRatioLimit ', () => {
-    const player1 = new TeamPlayer(
-      'anyPlayerId',
-      'anyTeamId',
-      PlayerRole.COMMON,
-      1.51
-    )
-    const player2 = new TeamPlayer(
-      'anyPlayerId',
-      'anyTeamId',
-      PlayerRole.COMMON,
-      1.12
-    )
-    const player3 = new TeamPlayer(
-      'anyPlayerId',
-      'anyTeamId',
-      PlayerRole.COMMON,
-      1.11
-    )
+    const player1 = new TeamPlayer(commomPlayer, 'anyTeamId', PlayerRole.COMMON)
+    const player2 = new TeamPlayer(commomPlayer, 'anyTeamId', PlayerRole.COMMON)
 
-    jest
-      .spyOn(team, 'getTeamPlayers')
-      .mockReturnValueOnce([player1, player2, player3])
+    jest.spyOn(team, 'getTeamPlayers').mockReturnValueOnce([player1, player2])
 
     expect(() => new TeamSubscription(tournament, team, payment)).toThrow(
       new TeamSubscriptionError(

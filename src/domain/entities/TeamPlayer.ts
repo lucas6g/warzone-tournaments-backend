@@ -1,14 +1,14 @@
+import { Player } from '@/domain/entities/Player'
 import { PlayerRole } from '@/domain/enums/PlayerRole'
 
 export class TeamPlayer {
   constructor (
-    private readonly playerId: string,
+    private readonly player: Player,
     private readonly teamId: string,
-    private readonly role: PlayerRole,
-    private readonly kdLevel?: number
+    private readonly role: PlayerRole
   ) {}
 
-  getKdLevel (): number {
-    return Number(this.kdLevel)
+  getPlayerKdLevel (): number {
+    return this.player.getKdLevel()
   }
 }
