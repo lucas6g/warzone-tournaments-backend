@@ -1,5 +1,3 @@
-import { PlayerRole } from '@/domain/enums/PlayerRole'
-
 export class Player {
   constructor (
     private readonly id: string,
@@ -8,7 +6,6 @@ export class Player {
     private readonly password: string,
     private readonly kdLevel: number,
     private readonly pixKey: string,
-    private readonly playerRole: PlayerRole,
     private readonly gamerTag: string,
     private readonly platForm: string
   ) {}

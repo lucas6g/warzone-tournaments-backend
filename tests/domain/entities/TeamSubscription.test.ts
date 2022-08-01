@@ -34,7 +34,6 @@ describe('TeamSubscription', () => {
         'anyPassword',
         1.2,
         'anyPixkey',
-        PlayerRole.LEADER,
         'anyGamerTag',
         'anyPlatForm'
       )
@@ -46,7 +45,6 @@ describe('TeamSubscription', () => {
       'anyPassword',
       1.6,
       'anyPixkey',
-      PlayerRole.COMMON,
       'anyGamerTag',
       'anyPlatForm'
     )

@@ -1,5 +1,4 @@
 import { Player } from '@/domain/entities/Player'
-import { PlayerRole } from '@/domain/enums/PlayerRole'
 
 describe('Player', () => {
   let sut: Player
@@ -12,7 +11,6 @@ describe('Player', () => {
       'anyPassword',
       1.5,
       'anyPixkey',
-      PlayerRole.COMMON,
       'anyGamerTag',
       'anyPlatForm'
     )

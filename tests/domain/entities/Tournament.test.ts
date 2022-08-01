@@ -7,7 +7,7 @@ import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 import { Tournament } from '@/domain/entities/Tournament'
 import { GameType } from '@/domain/enums/GameType'
 import { PaymentStatus } from '@/domain/enums/PaymentStatus'
-import { PlayerRole } from '@/domain/enums/PlayerRole'
+
 import { InvalidPreviosDateError } from '@/domain/errors/InvalidPreviosDateError'
 
 describe('Tournament', () => {
@@ -31,7 +31,6 @@ describe('Tournament', () => {
         'anyPassword',
         1.2,
         'anyPixkey',
-        PlayerRole.LEADER,
         'anyGamerTag',
         'anyPlatForm'
       )
