@@ -1,5 +1,7 @@
 import { Player } from '@/domain/entities/Player'
 import { Team } from '@/domain/entities/Team'
+import { TournamentScore } from '@/domain/entities/TournamentScore'
+import { PlacementPoints } from '@/domain/enums/PlacementPoints'
 
 describe('Team', () => {
   let sut: Team
@@ -42,5 +44,18 @@ describe('Team', () => {
     )
 
     expect(sut.getTotalPlayers()).toBe(2)
+  })
+  it('should add a TournamentScore to the Team', () => {
+    sut.addTournamentScore(
+      new TournamentScore(
+        'anyId',
+        'tournomentId',
+        'teamId',
+        PlacementPoints.FIRSTPLACE,
+        22
+      )
+    )
+
+    expect(sut.getTournamentScores().length).toBe(1)
   })
 })
