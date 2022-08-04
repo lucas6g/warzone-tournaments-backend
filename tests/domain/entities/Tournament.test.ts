@@ -7,8 +7,7 @@ import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 import { Tournament } from '@/domain/entities/Tournament'
 import { GameType } from '@/domain/enums/GameType'
 import { PaymentStatus } from '@/domain/enums/PaymentStatus'
-
-import { InvalidPreviosDateError } from '@/domain/errors/InvalidPreviosDateError'
+import { TournamentError } from '@/domain/errors/TournamentError'
 
 describe('Tournament', () => {
   let sut: Tournament
@@ -64,7 +63,7 @@ describe('Tournament', () => {
     expect(
       () =>
         new Tournament('anyTournomentId', pastStartAtDate, endAt, 5, 1.5, game)
-    ).toThrow(new InvalidPreviosDateError('Invalid previos date'))
+    ).toThrow(new TournamentError('Invalid past date'))
   })
 
   it('should not create a Tournament with past endsAt date', () => {
@@ -73,7 +72,7 @@ describe('Tournament', () => {
     expect(
       () =>
         new Tournament('anyTournomentId', startAt, pastEndAtDate, 5, 1.5, game)
-    ).toThrow(new InvalidPreviosDateError('Invalid previos date'))
+    ).toThrow(new TournamentError('Invalid past date'))
   })
   it('should add TeamSubscription to tournament', () => {
     sut.addSubscription(teamSubscription)

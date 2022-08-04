@@ -1,6 +1,7 @@
 import { Game } from '@/domain/entities/Game'
 import { TeamSubscription } from '@/domain/entities/TeamSubscription'
-import { InvalidPreviosDateError } from '@/domain/errors/InvalidPreviosDateError'
+
+import { TournamentError } from '@/domain/errors/TournamentError'
 
 export class Tournament {
   constructor (
@@ -13,7 +14,7 @@ export class Tournament {
     private readonly teamSubscriptions: TeamSubscription[] = []
   ) {
     if (!this.isValidDate(startAt) || !this.isValidDate(endAt)) {
-      throw new InvalidPreviosDateError('Invalid previos date')
+      throw new TournamentError('Invalid past date')
     }
   }
 
