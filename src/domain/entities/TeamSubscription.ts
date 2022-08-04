@@ -38,8 +38,8 @@ export class TeamSubscription {
     }
 
     this.tournament = tournament
-    this.payment = payment
     this.team = team
+    this.payment = payment
     this.date = date
   }
 

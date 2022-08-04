@@ -4,18 +4,15 @@ import { TournamentScore } from '@/domain/entities/TournamentScore'
 import { PlayerRole } from '@/domain/enums/PlayerRole'
 
 export class Team {
-  private readonly id: string
-  private readonly leader: Player
-  private readonly name: string
-  private readonly logo: string
   private readonly teamPlayers: TeamPlayer[] = []
   private readonly tournamentScores: TournamentScore[]
 
-  constructor (id: string, name: string, logo: string, leader: Player) {
-    this.id = id
-    this.name = name
-    this.logo = logo
-    this.leader = leader
+  constructor (
+    private readonly id: string,
+    private readonly name: string,
+    private readonly logo: string,
+    private readonly leader: Player
+  ) {
     this.teamPlayers.push(new TeamPlayer(leader, this.id, PlayerRole.LEADER))
     this.tournamentScores = []
   }
