@@ -1,11 +1,13 @@
 import { Game } from '@/domain/entities/Game'
 import { Payment } from '@/domain/entities/Payment'
+import { Player } from '@/domain/entities/Player'
 
 import { Team } from '@/domain/entities/Team'
 import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 import { Tournament } from '@/domain/entities/Tournament'
 import { GameType } from '@/domain/enums/GameType'
 import { PaymentStatus } from '@/domain/enums/PaymentStatus'
+
 import { InvalidPreviosDateError } from '@/domain/errors/InvalidPreviosDateError'
 
 describe('Tournament', () => {
@@ -18,7 +20,22 @@ describe('Tournament', () => {
   let teamSubscription: TeamSubscription
 
   beforeEach(() => {
-    team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo')
+    team = new Team(
+      'anyTeamId',
+      'anyTeamName',
+      'anyTeamLogo',
+      new Player(
+        'anyId',
+        'anyName',
+        'anyEmail',
+        'anyPassword',
+        1.2,
+        'anyPixkey',
+        'anyGamerTag',
+        'anyPlatForm'
+      )
+    )
+    jest.spyOn(team, 'getTotalPlayers').mockReturnValue(3)
     jest.spyOn(Date, 'now').mockImplementation(() => {
       return new Date('2022-07-15T14:00:00').getTime()
     })

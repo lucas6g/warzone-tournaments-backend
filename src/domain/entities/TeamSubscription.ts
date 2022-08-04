@@ -57,13 +57,14 @@ export class TeamSubscription {
     tournament: Tournament,
     team: Team
   ): boolean {
-    const players = team
-      .getPlayers()
+    const teamMember = team
+      .getTeamPlayers()
       .filter(
-        player => player.getKdLevel() > tournament.getkillDeathRatioLimit()
+        teamMember =>
+          teamMember.getPlayerKdLevel() > tournament.getkillDeathRatioLimit()
       )
 
-    return players.length > 0
+    return teamMember.length > 0
   }
 
   getTeam (): Team {

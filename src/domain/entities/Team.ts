@@ -1,15 +1,35 @@
 import { Player } from '@/domain/entities/Player'
+import { TeamPlayer } from '@/domain/entities/TeamPlayer'
+import { TournamentScore } from '@/domain/entities/TournamentScore'
 import { PlayerRole } from '@/domain/enums/PlayerRole'
 
 export class Team {
   private readonly id: string
+  private readonly leader: Player
   private readonly name: string
   private readonly logo: string
+  private readonly teamPlayers: TeamPlayer[] = []
+  private readonly tournamentScores: TournamentScore[]
 
-  constructor (id: string, name: string, logo: string) {
+  constructor (id: string, name: string, logo: string, leader: Player) {
     this.id = id
     this.name = name
     this.logo = logo
+    this.leader = leader
+    this.teamPlayers.push(new TeamPlayer(leader, this.id, PlayerRole.LEADER))
+    this.tournamentScores = []
+  }
+
+  addPlayer (player: Player): void {
+    this.teamPlayers.push(new TeamPlayer(player, this.id, PlayerRole.COMMON))
+  }
+
+  addTournamentScore (tounamentScore: TournamentScore): void {
+    this.tournamentScores.push(tounamentScore)
+  }
+
+  getTournamentScores (): TournamentScore[] {
+    return this.tournamentScores
   }
 
   getId (): string {
@@ -17,44 +37,14 @@ export class Team {
   }
 
   getTotalPlayers (): number {
-    return 3
+    return this.teamPlayers.length
   }
 
-  getPlayers (): Player[] {
-    const player1 = new Player(
-      'anyId',
-      'anyName',
-      'anyEmail',
-      'anyPassword',
-      1.2,
-      'anyPixkey',
-      PlayerRole.COMMON,
-      'anyGamerTag',
-      'anyPlatForm'
-    )
-    const player2 = new Player(
-      'anyId',
-      'anyName',
-      'anyEmail',
-      'anyPassword',
-      1.12,
-      'anyPixkey',
-      PlayerRole.COMMON,
-      'anyGamerTag',
-      'anyPlatForm'
-    )
-    const player3 = new Player(
-      'anyId',
-      'anyName',
-      'anyEmail',
-      'anyPassword',
-      1.11,
-      'anyPixkey',
-      PlayerRole.COMMON,
-      'anyGamerTag',
-      'anyPlatForm'
-    )
+  getTeamPlayers (): TeamPlayer[] {
+    return this.teamPlayers
+  }
 
-    return [player1, player2, player3]
+  getLeaderId (): string {
+    return this.leader.getId()
   }
 }
