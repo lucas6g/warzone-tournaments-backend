@@ -5,8 +5,10 @@ import { Player } from '@/domain/entities/Player'
 import { Team } from '@/domain/entities/Team'
 import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 import { Tournament } from '@/domain/entities/Tournament'
+import { TournamentScore } from '@/domain/entities/TournamentScore'
 import { GameType } from '@/domain/enums/GameType'
 import { PaymentStatus } from '@/domain/enums/PaymentStatus'
+import { PlacementPoints } from '@/domain/enums/PlacementPoints'
 import { TournamentError } from '@/domain/errors/TournamentError'
 
 describe('Tournament', () => {
@@ -17,23 +19,21 @@ describe('Tournament', () => {
   let team: Team
   let payment: Payment
   let teamSubscription: TeamSubscription
+  let player: Player
 
   beforeEach(() => {
-    team = new Team(
-      'anyTeamId',
-      'anyTeamName',
-      'anyTeamLogo',
-      new Player(
-        'anyId',
-        'anyName',
-        'anyEmail',
-        'anyPassword',
-        1.2,
-        'anyPixkey',
-        'anyGamerTag',
-        'anyPlatForm'
-      )
+    player = new Player(
+      'anyId',
+      'anyName',
+      'anyEmail',
+      'anyPassword',
+      1.2,
+      'anyPixkey',
+      'anyGamerTag',
+      'anyPlatForm'
     )
+    team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo', player)
+
     jest.spyOn(team, 'getTotalPlayers').mockReturnValue(3)
     jest.spyOn(Date, 'now').mockImplementation(() => {
       return new Date('2022-07-15T14:00:00').getTime()
@@ -48,6 +48,7 @@ describe('Tournament', () => {
     startAt = new Date('2022-07-15T17:00:00')
     endAt = new Date('2022-07-15T19:00:00')
     sut = new Tournament('anyTournomentId', startAt, endAt, 5, 1.5, game)
+
     payment = new Payment()
     jest.spyOn(payment, 'getStatus').mockReturnValue(PaymentStatus.PAID)
     teamSubscription = new TeamSubscription(sut, team, payment)
@@ -93,5 +94,79 @@ describe('Tournament', () => {
     const registrationCoust = sut.getRegistrationCoust()
 
     expect(registrationCoust).toBe(5)
+  })
+  it('should generate Tournament classification', () => {
+    const team1 = new Team('anyTeamId', 'faze', 'anyTeamLogo', player)
+    const team2 = new Team('anyTeamId', 'los grandes', 'anyTeamLogo', player)
+    const team3 = new Team('anyTeamId', 'zetas', 'anyTeamLogo', player)
+
+    team1.addPlayer(player)
+    team1.addPlayer(player)
+    team1.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 8, PlacementPoints.FIRSTPLACE)
+    )
+    team1.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FIRSTPLACE)
+    )
+    team1.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FIRSTPLACE)
+    )
+
+    team2.addPlayer(player)
+    team2.addPlayer(player)
+    team2.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FIRSTPLACE)
+    )
+    team2.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FIRSTPLACE)
+    )
+    team2.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 4, PlacementPoints.SECONDPLACE)
+    )
+
+    team3.addPlayer(player)
+    team3.addPlayer(player)
+    team3.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.SECONDPLACE)
+    )
+    team3.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FOURTHPLACE)
+    )
+    team3.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 10, PlacementPoints.EIGHTHPLACE)
+    )
+
+    sut.addSubscription(new TeamSubscription(sut, team1, payment))
+    sut.addSubscription(new TeamSubscription(sut, team2, payment))
+    sut.addSubscription(new TeamSubscription(sut, team3, payment))
+
+    const classification = sut.generateClassification()
+
+    expect(classification).toEqual([
+      {
+        position: 0,
+        teamName: 'faze',
+        teamId: 'anyTeamId',
+        totalkills: 98,
+        totalPlacementPoints: 30,
+        finalScore: 128
+      },
+      {
+        position: 1,
+        teamId: 'anyTeamId',
+        teamName: 'los grandes',
+        totalkills: 94,
+        totalPlacementPoints: 29,
+        finalScore: 123
+      },
+      {
+        position: 2,
+        teamId: 'anyTeamId',
+        teamName: 'zetas',
+        totalkills: 100,
+        totalPlacementPoints: 19,
+        finalScore: 119
+      }
+    ])
   })
 })

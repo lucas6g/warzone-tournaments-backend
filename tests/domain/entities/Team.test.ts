@@ -50,7 +50,6 @@ describe('Team', () => {
       new TournamentScore(
         'anyId',
         'tournomentId',
-        'teamId',
         PlacementPoints.FIRSTPLACE,
         22
       )

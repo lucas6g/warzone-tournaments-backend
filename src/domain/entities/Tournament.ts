@@ -40,6 +40,40 @@ export class Tournament {
     return true
   }
 
+  generateClassification (): TeamPlacement[] {
+    const teamPlacements: TeamPlacement[] = []
+    for (const [index, teamSubscription] of this.teamSubscriptions.entries()) {
+      const team = teamSubscription.getTeam()
+      const finalTeamScore = team.getTournamentScores().reduce(
+        (acc, tournamentScore) => {
+          acc.totalkills += tournamentScore.getNumberOfKills()
+          acc.totalPlacementPoints += tournamentScore.getPlacementPoints()
+          acc.finalScore += tournamentScore.getScore()
+          return acc
+        },
+        {
+          totalkills: 0,
+          totalPlacementPoints: 0,
+          finalScore: 0
+        }
+      )
+      teamPlacements.push({
+        position: index,
+        teamId: team.getId(),
+        teamName: team.getName(),
+        totalkills: finalTeamScore.totalkills,
+        totalPlacementPoints: finalTeamScore.totalPlacementPoints,
+        finalScore: finalTeamScore.finalScore
+      })
+    }
+    this.sortTeamPlacements(teamPlacements)
+    return teamPlacements
+  }
+
+  private sortTeamPlacements (teamPlacements: TeamPlacement[]): void {
+    teamPlacements.sort((a, b) => b.finalScore - a.finalScore)
+  }
+
   getGame (): Game {
     return this.game
   }
@@ -59,4 +93,17 @@ export class Tournament {
   getkillDeathRatioLimit (): number {
     return this.killDeathRatioLimit
   }
+
+  getId (): string {
+    return this.id
+  }
+}
+
+type TeamPlacement = {
+  position: number
+  teamId: string
+  teamName: string
+  totalkills: number
+  totalPlacementPoints: number
+  finalScore: number
 }

@@ -44,4 +44,8 @@ export class Team {
   getLeaderId (): string {
     return this.leader.getId()
   }
+
+  getName (): string {
+    return this.name
+  }
 }
