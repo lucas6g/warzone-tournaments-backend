@@ -2,8 +2,10 @@ import { Game } from '@/domain/entities/Game'
 import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 
 import { TournamentError } from '@/domain/errors/TournamentError'
+import { TeamPlacement } from '@/domain/types/TeamPlacement'
 
 export class Tournament {
+  FIFTHPLACE = 5 - 1
   constructor (
     private readonly id: string,
     private readonly startAt: Date,
@@ -74,6 +76,12 @@ export class Tournament {
     teamPlacements.sort((a, b) => b.finalScore - a.finalScore)
   }
 
+  getPlacementsThatReceiveAward (): TeamPlacement[] {
+    return this.generateClassification().filter(
+      teamPlacement => teamPlacement.position <= this.FIFTHPLACE
+    )
+  }
+
   getGame (): Game {
     return this.game
   }
@@ -97,13 +105,4 @@ export class Tournament {
   getId (): string {
     return this.id
   }
-}
-
-type TeamPlacement = {
-  position: number
-  teamId: string
-  teamName: string
-  totalkills: number
-  totalPlacementPoints: number
-  finalScore: number
 }

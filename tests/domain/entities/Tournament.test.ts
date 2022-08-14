@@ -171,4 +171,38 @@ describe('Tournament', () => {
       }
     ])
   })
+  it('should define which placements that receive award', () => {
+    sut.addSubscription(new TeamSubscription(sut, team1, payment))
+    sut.addSubscription(new TeamSubscription(sut, team2, payment))
+    sut.addSubscription(new TeamSubscription(sut, team3, payment))
+
+    const placementsThatReceiveAwards = sut.getPlacementsThatReceiveAward()
+
+    expect(placementsThatReceiveAwards).toEqual([
+      {
+        position: 0,
+        teamName: 'faze',
+        teamId: 'anyTeamId',
+        totalkills: 98,
+        totalPlacementPoints: 30,
+        finalScore: 128
+      },
+      {
+        position: 1,
+        teamId: 'anyTeamId',
+        teamName: 'los grandes',
+        totalkills: 94,
+        totalPlacementPoints: 29,
+        finalScore: 123
+      },
+      {
+        position: 2,
+        teamId: 'anyTeamId',
+        teamName: 'zetas',
+        totalkills: 100,
+        totalPlacementPoints: 19,
+        finalScore: 119
+      }
+    ])
+  })
 })
