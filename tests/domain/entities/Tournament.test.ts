@@ -20,6 +20,9 @@ describe('Tournament', () => {
   let payment: Payment
   let teamSubscription: TeamSubscription
   let player: Player
+  let team1: Team
+  let team2: Team
+  let team3: Team
 
   beforeEach(() => {
     player = new Player(
@@ -48,6 +51,45 @@ describe('Tournament', () => {
     startAt = new Date('2022-07-15T17:00:00')
     endAt = new Date('2022-07-15T19:00:00')
     sut = new Tournament('anyTournomentId', startAt, endAt, 5, 1.5, game)
+
+    team1 = new Team('anyTeamId', 'faze', 'anyTeamLogo', player)
+    team2 = new Team('anyTeamId', 'los grandes', 'anyTeamLogo', player)
+    team3 = new Team('anyTeamId', 'zetas', 'anyTeamLogo', player)
+    team1.addPlayer(player)
+    team1.addPlayer(player)
+    team2.addPlayer(player)
+    team2.addPlayer(player)
+    team3.addPlayer(player)
+    team3.addPlayer(player)
+    team1.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 8, PlacementPoints.FIRSTPLACE)
+    )
+    team1.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FIRSTPLACE)
+    )
+    team1.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FIRSTPLACE)
+    )
+
+    team2.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FIRSTPLACE)
+    )
+    team2.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FIRSTPLACE)
+    )
+    team2.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 4, PlacementPoints.SECONDPLACE)
+    )
+
+    team3.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.SECONDPLACE)
+    )
+    team3.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FOURTHPLACE)
+    )
+    team3.addTournamentScore(
+      new TournamentScore('anyId', sut.getId(), 10, PlacementPoints.EIGHTHPLACE)
+    )
 
     payment = new Payment()
     jest.spyOn(payment, 'getStatus').mockReturnValue(PaymentStatus.PAID)
@@ -96,46 +138,6 @@ describe('Tournament', () => {
     expect(registrationCoust).toBe(5)
   })
   it('should generate Tournament classification', () => {
-    const team1 = new Team('anyTeamId', 'faze', 'anyTeamLogo', player)
-    const team2 = new Team('anyTeamId', 'los grandes', 'anyTeamLogo', player)
-    const team3 = new Team('anyTeamId', 'zetas', 'anyTeamLogo', player)
-
-    team1.addPlayer(player)
-    team1.addPlayer(player)
-    team1.addTournamentScore(
-      new TournamentScore('anyId', sut.getId(), 8, PlacementPoints.FIRSTPLACE)
-    )
-    team1.addTournamentScore(
-      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FIRSTPLACE)
-    )
-    team1.addTournamentScore(
-      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FIRSTPLACE)
-    )
-
-    team2.addPlayer(player)
-    team2.addPlayer(player)
-    team2.addTournamentScore(
-      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FIRSTPLACE)
-    )
-    team2.addTournamentScore(
-      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FIRSTPLACE)
-    )
-    team2.addTournamentScore(
-      new TournamentScore('anyId', sut.getId(), 4, PlacementPoints.SECONDPLACE)
-    )
-
-    team3.addPlayer(player)
-    team3.addPlayer(player)
-    team3.addTournamentScore(
-      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.SECONDPLACE)
-    )
-    team3.addTournamentScore(
-      new TournamentScore('anyId', sut.getId(), 45, PlacementPoints.FOURTHPLACE)
-    )
-    team3.addTournamentScore(
-      new TournamentScore('anyId', sut.getId(), 10, PlacementPoints.EIGHTHPLACE)
-    )
-
     sut.addSubscription(new TeamSubscription(sut, team1, payment))
     sut.addSubscription(new TeamSubscription(sut, team2, payment))
     sut.addSubscription(new TeamSubscription(sut, team3, payment))
