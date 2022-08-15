@@ -146,7 +146,7 @@ describe('Tournament', () => {
 
     expect(classification).toEqual([
       {
-        position: 0,
+        placement: 0,
         teamName: 'faze',
         teamId: 'anyTeamId',
         totalkills: 98,
@@ -154,7 +154,7 @@ describe('Tournament', () => {
         finalScore: 128
       },
       {
-        position: 1,
+        placement: 1,
         teamId: 'anyTeamId',
         teamName: 'los grandes',
         totalkills: 94,
@@ -162,7 +162,7 @@ describe('Tournament', () => {
         finalScore: 123
       },
       {
-        position: 2,
+        placement: 2,
         teamId: 'anyTeamId',
         teamName: 'zetas',
         totalkills: 100,
@@ -180,7 +180,7 @@ describe('Tournament', () => {
 
     expect(placementsThatReceiveAwards).toEqual([
       {
-        position: 0,
+        placement: 0,
         teamName: 'faze',
         teamId: 'anyTeamId',
         totalkills: 98,
@@ -188,7 +188,7 @@ describe('Tournament', () => {
         finalScore: 128
       },
       {
-        position: 1,
+        placement: 1,
         teamId: 'anyTeamId',
         teamName: 'los grandes',
         totalkills: 94,
@@ -196,7 +196,7 @@ describe('Tournament', () => {
         finalScore: 123
       },
       {
-        position: 2,
+        placement: 2,
         teamId: 'anyTeamId',
         teamName: 'zetas',
         totalkills: 100,

@@ -1,5 +1,5 @@
 export type TeamPlacement = {
-  position: number
+  placement: number
   teamId: string
   teamName: string
   totalkills: number

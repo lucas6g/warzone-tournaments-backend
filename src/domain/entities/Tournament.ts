@@ -60,7 +60,7 @@ export class Tournament {
         }
       )
       teamPlacements.push({
-        position: index,
+        placement: index,
         teamId: team.getId(),
         teamName: team.getName(),
         totalkills: finalTeamScore.totalkills,
@@ -78,7 +78,7 @@ export class Tournament {
 
   getPlacementsThatReceiveAward (): TeamPlacement[] {
     return this.generateClassification().filter(
-      teamPlacement => teamPlacement.position <= this.FIFTHPLACE
+      teamPlacement => teamPlacement.placement <= this.FIFTHPLACE
     )
   }
 
