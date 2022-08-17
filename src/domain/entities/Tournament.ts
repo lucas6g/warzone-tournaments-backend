@@ -34,7 +34,7 @@ export class Tournament {
     return this.teamSubscriptions.length
   }
 
-  isValidDate (date: Date, today: Date = new Date(Date.now())): boolean {
+  isValidDate (date: Date, today: Date = new Date()): boolean {
     const isPastDate = date.getTime() < today.getTime()
     if (isPastDate) {
       return false

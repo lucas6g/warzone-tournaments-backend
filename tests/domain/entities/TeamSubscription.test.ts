@@ -9,6 +9,7 @@ import { GameType } from '@/domain/enums/GameType'
 import { PaymentStatus } from '@/domain/enums/PaymentStatus'
 import { PlayerRole } from '@/domain/enums/PlayerRole'
 import { TeamSubscriptionError } from '@/domain/errors/TeamSubscriptionError'
+import { set } from 'mockdate'
 
 describe('TeamSubscription', () => {
   let sut: TeamSubscription
@@ -18,11 +19,11 @@ describe('TeamSubscription', () => {
   let commomPlayer: Player
   let game: Game
 
-  beforeEach(() => {
-    jest.spyOn(Date, 'now').mockImplementation(() => {
-      return new Date('2022-07-15T14:00:00').getTime()
-    })
+  beforeAll(() => {
+    set(new Date('2022-07-15T14:00:00'))
+  })
 
+  beforeEach(() => {
     team = new Team(
       'anyTeamId',
       'anyTeamName',

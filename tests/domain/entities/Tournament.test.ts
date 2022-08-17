@@ -1,6 +1,7 @@
 import { Game } from '@/domain/entities/Game'
 import { Payment } from '@/domain/entities/Payment'
 import { Player } from '@/domain/entities/Player'
+import { set } from 'mockdate'
 
 import { Team } from '@/domain/entities/Team'
 import { TeamSubscription } from '@/domain/entities/TeamSubscription'
@@ -24,6 +25,9 @@ describe('Tournament', () => {
   let team2: Team
   let team3: Team
 
+  beforeAll(() => {
+    set(new Date('2022-07-15T14:00:00'))
+  })
   beforeEach(() => {
     player = new Player(
       'anyId',
@@ -38,9 +42,7 @@ describe('Tournament', () => {
     team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo', player)
 
     jest.spyOn(team, 'getTotalPlayers').mockReturnValue(3)
-    jest.spyOn(Date, 'now').mockImplementation(() => {
-      return new Date('2022-07-15T14:00:00').getTime()
-    })
+
     game = new Game(
       'anyGameId',
       'anyGameName',
