@@ -26,6 +26,7 @@
     "build": "tsc -p tsconfig-build.json",
     "start": "node dist/main/server.js",
     "test": "jest --passWithNoTests --no-cache --runInBand",
+    "test:unit": "yarn test --config ./jest.unit.config.js",
     "test:integration": "yarn test --config ./jest.integration.config.js",
     "test:whatch": "yarn test --whatch",
     "test:coverage": "yarn test --coverage"
