@@ -7,10 +7,11 @@ import { Team } from '@/domain/entities/Team'
 import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 import { Tournament } from '@/domain/entities/Tournament'
 import { TournamentScore } from '@/domain/entities/TournamentScore'
-import { GameType } from '@/domain/enums/GameType'
+
 import { PaymentStatus } from '@/domain/enums/PaymentStatus'
 import { PlacementPoints } from '@/domain/enums/PlacementPoints'
 import { TournamentError } from '@/domain/errors/TournamentError'
+import { TournamentType } from '@/domain/enums/TournamentType'
 
 describe('Tournament', () => {
   let sut: Tournament
@@ -43,16 +44,19 @@ describe('Tournament', () => {
 
     jest.spyOn(team, 'getTotalPlayers').mockReturnValue(3)
 
-    game = new Game(
-      'anyGameId',
-      'anyGameName',
-      GameType.TRIOS,
-      'anyGameImage',
-      'anyGameMode'
-    )
+    game = new Game('anyGameId', 'anyGameName', 'anyGameImage')
     startAt = new Date('2022-07-15T17:00:00')
     endAt = new Date('2022-07-15T19:00:00')
-    sut = new Tournament('anyTournomentId', startAt, endAt, 5, 1.5, game)
+    sut = new Tournament(
+      'anyTournomentId',
+      startAt,
+      endAt,
+      5,
+      1.5,
+      game,
+      'anyMode',
+      TournamentType.TRIOS
+    )
 
     team1 = new Team('anyTeamId', 'faze', 'anyTeamLogo', player)
     team2 = new Team('anyTeamId', 'los grandes', 'anyTeamLogo', player)
@@ -107,7 +111,16 @@ describe('Tournament', () => {
 
     expect(
       () =>
-        new Tournament('anyTournomentId', pastStartAtDate, endAt, 5, 1.5, game)
+        new Tournament(
+          'anyTournomentId',
+          pastStartAtDate,
+          endAt,
+          5,
+          1.5,
+          game,
+          'anyMode',
+          TournamentType.TRIOS
+        )
     ).toThrow(new TournamentError('Invalid past date'))
   })
 
@@ -116,7 +129,16 @@ describe('Tournament', () => {
 
     expect(
       () =>
-        new Tournament('anyTournomentId', startAt, pastEndAtDate, 5, 1.5, game)
+        new Tournament(
+          'anyTournomentId',
+          startAt,
+          pastEndAtDate,
+          5,
+          1.5,
+          game,
+          'anyMode',
+          TournamentType.TRIOS
+        )
     ).toThrow(new TournamentError('Invalid past date'))
   })
   it('should add TeamSubscription to tournament', () => {

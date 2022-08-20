@@ -1,6 +1,6 @@
 import { Game } from '@/domain/entities/Game'
 import { TeamSubscription } from '@/domain/entities/TeamSubscription'
-
+import { TournamentType } from '@/domain/enums/TournamentType'
 import { TournamentError } from '@/domain/errors/TournamentError'
 import { TeamPlacement } from '@/domain/types/TeamPlacement'
 
@@ -13,6 +13,8 @@ export class Tournament {
     private readonly registrationCoust: number,
     private readonly killDeathRatioLimit: number,
     private readonly game: Game,
+    private readonly mode: string,
+    private readonly type: TournamentType,
     private readonly teamSubscriptions: TeamSubscription[] = []
   ) {
     if (!this.isValidDate(startAt) || !this.isValidDate(endAt)) {
@@ -80,6 +82,10 @@ export class Tournament {
     return this.generateClassification().filter(
       teamPlacement => teamPlacement.placement <= this.FIFTHPLACE
     )
+  }
+
+  getType (): TournamentType {
+    return this.type
   }
 
   getGame (): Game {

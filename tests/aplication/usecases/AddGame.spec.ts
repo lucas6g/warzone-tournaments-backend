@@ -5,9 +5,7 @@ describe('AddGame', () => {
     const sut = new AddGame()
 
     const input = {
-      name: 'warzone',
-      gameType: 3,
-      mode: 'killrace'
+      name: 'warzone'
     }
 
     const output = await sut.execute(input)

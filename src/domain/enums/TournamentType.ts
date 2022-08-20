@@ -1,4 +1,4 @@
-export enum GameType {
+export enum TournamentType {
   SOLOS = 1,
   DUOS = 2,
   TRIOS = 3,

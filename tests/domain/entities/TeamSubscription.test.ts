@@ -5,9 +5,10 @@ import { Team } from '@/domain/entities/Team'
 import { TeamPlayer } from '@/domain/entities/TeamPlayer'
 import { TeamSubscription } from '@/domain/entities/TeamSubscription'
 import { Tournament } from '@/domain/entities/Tournament'
-import { GameType } from '@/domain/enums/GameType'
+
 import { PaymentStatus } from '@/domain/enums/PaymentStatus'
 import { PlayerRole } from '@/domain/enums/PlayerRole'
+import { TournamentType } from '@/domain/enums/TournamentType'
 import { TeamSubscriptionError } from '@/domain/errors/TeamSubscriptionError'
 import { set } from 'mockdate'
 
@@ -51,20 +52,16 @@ describe('TeamSubscription', () => {
     )
     jest.spyOn(team, 'getTotalPlayers').mockReturnValue(3)
 
-    game = new Game(
-      'anyGameId',
-      'anyGameName',
-      GameType.TRIOS,
-      'anyGameImage',
-      'anyGameMode'
-    )
+    game = new Game('anyGameId', 'anyGameName', 'anyGameImage')
     tournament = new Tournament(
       'anyTournomentId',
       new Date('2022-07-15T17:00:00'),
       new Date('2022-07-15T19:00:00'),
       5,
       1.5,
-      game
+      game,
+      'anyMode',
+      TournamentType.TRIOS
     )
     payment = new Payment()
     jest.spyOn(payment, 'getStatus').mockReturnValue(PaymentStatus.PAID)
@@ -78,11 +75,11 @@ describe('TeamSubscription', () => {
     expect(sut.getTournament()).toEqual(tournament)
     expect(total).toBe(15)
   })
-  it('should not subscribe a Team to a Tournament if number of players is different from the GameType', () => {
+  it('should not subscribe a Team to a Tournament if number of players is different from the tournament', () => {
     jest.spyOn(team, 'getTotalPlayers').mockReturnValueOnce(4)
     expect(() => new TeamSubscription(tournament, team, payment)).toThrow(
       new TeamSubscriptionError(
-        'number of team players is different from the type of game'
+        'number of team players is different from the type of tournament'
       )
     )
   })

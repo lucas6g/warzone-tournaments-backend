@@ -1,16 +1,9 @@
 import { Game } from '@/domain/entities/Game'
-import { GameType } from '@/domain/enums/GameType'
 
 describe('Game', () => {
   it('should create a Game', () => {
-    const sut = new Game(
-      'anyid',
-      'anyName',
-      GameType.TRIOS,
-      'anyImage',
-      'anyMode'
-    )
+    const sut = new Game('anyid', 'anyName', 'anyImage')
 
-    expect(sut.getGameType()).toBe(GameType.TRIOS)
+    expect(sut.getName()).toBe('anyName')
   })
 })

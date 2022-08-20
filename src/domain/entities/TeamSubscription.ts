@@ -10,9 +10,9 @@ export class TeamSubscription {
     private readonly payment: Payment,
     private readonly date: Date = new Date(Date.now())
   ) {
-    if (team.getTotalPlayers() !== tournament.getGame().getGameType()) {
+    if (team.getTotalPlayers() !== tournament.getType()) {
       throw new TeamSubscriptionError(
-        'number of team players is different from the type of game'
+        'number of team players is different from the type of tournament'
       )
     }
     if (this.isDuringTournamentPeriod(tournament, date)) {

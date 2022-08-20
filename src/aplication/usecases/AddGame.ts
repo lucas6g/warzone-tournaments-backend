@@ -8,8 +8,6 @@ export class AddGame implements UseCase<Input, Output> {
 
 type Input = {
   name: string
-  gameType: number
-  mode: string
 }
 type Output = {
   status: string
