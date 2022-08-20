@@ -30,7 +30,6 @@
     "test:integration": "yarn test --config ./jest.integration.config.js",
     "test:whatch": "yarn test --whatch",
     "test:coverage": "yarn test --coverage"
-
   },
   "devDependencies": {
     "@types/jest": "^28.1.4",
@@ -43,6 +42,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "jest": "^28.1.2",
+    "jest-mock-extended": "^2.0.7",
     "ts-jest": "^28.0.5",
     "typescript": "^4.7.4"
   },
