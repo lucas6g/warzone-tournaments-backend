@@ -1,4 +1,5 @@
 import { AddGameError } from '@/aplication/errors/AddGameError'
+import { FileStorage } from '@/aplication/protocols/FileStorage'
 import { GameRepository } from '@/aplication/protocols/GameRepository'
 import { IDGenerator } from '@/aplication/protocols/IDGenerator'
 import { AddGame } from '@/aplication/usecases/AddGame'
@@ -9,18 +10,21 @@ import { mock, MockProxy } from 'jest-mock-extended'
 describe('AddGame', () => {
   let idGenerator: MockProxy<IDGenerator>
   let gameRepository: MockProxy<GameRepository>
+  let fileStorage: MockProxy<FileStorage>
 
   beforeEach(() => {
     idGenerator = mock<IDGenerator>()
     gameRepository = mock<GameRepository>()
+    fileStorage = mock<FileStorage>()
 
     gameRepository.getByName.mockResolvedValue(undefined)
   })
 
   it('should add a new game', async () => {
-    const sut = new AddGame(idGenerator, gameRepository)
+    const sut = new AddGame(idGenerator, gameRepository, fileStorage)
 
     const input = {
+      fileName: 'anyFileName',
       name: 'warzone'
     }
 
@@ -28,9 +32,10 @@ describe('AddGame', () => {
     expect(output.status).toBe('created')
   })
   it('should call id generator', async () => {
-    const sut = new AddGame(idGenerator, gameRepository)
+    const sut = new AddGame(idGenerator, gameRepository, fileStorage)
 
     const input = {
+      fileName: 'anyFileName',
       name: 'warzone'
     }
 
@@ -38,9 +43,10 @@ describe('AddGame', () => {
     expect(idGenerator.generate).toHaveBeenCalledTimes(1)
   })
   it('should call GameRepository getByName method with correct parameters', async () => {
-    const sut = new AddGame(idGenerator, gameRepository)
+    const sut = new AddGame(idGenerator, gameRepository, fileStorage)
 
     const input = {
+      fileName: 'anyFileName',
       name: 'warzone'
     }
 
@@ -48,16 +54,29 @@ describe('AddGame', () => {
     expect(gameRepository.getByName).toHaveBeenCalledWith('warzone')
   })
   it('should throw AddGameError if game already exists', async () => {
-    const sut = new AddGame(idGenerator, gameRepository)
+    const sut = new AddGame(idGenerator, gameRepository, fileStorage)
     gameRepository.getByName.mockResolvedValueOnce(
       new Game('anyId', 'warzone', 'anyImage')
     )
     const input = {
+      fileName: 'anyFileName',
       name: 'warzone'
     }
 
     await expect(sut.execute(input)).rejects.toThrow(
       new AddGameError('game with name warzone already exists')
     )
+  })
+  it('should call FileStorage upload method with correct parameters', async () => {
+    const sut = new AddGame(idGenerator, gameRepository, fileStorage)
+
+    const input = {
+      fileName: 'anyFileName',
+      name: 'warzone'
+    }
+
+    await sut.execute(input)
+
+    expect(fileStorage.upload).toHaveBeenCalledWith('anyFileName')
   })
 })
