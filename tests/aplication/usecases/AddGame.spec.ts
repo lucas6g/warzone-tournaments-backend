@@ -8,6 +8,7 @@ import { Game } from '@/domain/entities/Game'
 import { mock, MockProxy } from 'jest-mock-extended'
 
 describe('AddGame', () => {
+  let sut: AddGame
   let idGenerator: MockProxy<IDGenerator>
   let gameRepository: MockProxy<GameRepository>
   let fileStorage: MockProxy<FileStorage>
@@ -16,13 +17,12 @@ describe('AddGame', () => {
     idGenerator = mock<IDGenerator>()
     gameRepository = mock<GameRepository>()
     fileStorage = mock<FileStorage>()
+    sut = new AddGame(idGenerator, gameRepository, fileStorage)
 
     gameRepository.getByName.mockResolvedValue(undefined)
   })
 
   it('should add a new game', async () => {
-    const sut = new AddGame(idGenerator, gameRepository, fileStorage)
-
     const input = {
       fileName: 'anyFileName',
       name: 'warzone'
@@ -32,8 +32,6 @@ describe('AddGame', () => {
     expect(output.status).toBe('created')
   })
   it('should call id generator', async () => {
-    const sut = new AddGame(idGenerator, gameRepository, fileStorage)
-
     const input = {
       fileName: 'anyFileName',
       name: 'warzone'
@@ -43,8 +41,6 @@ describe('AddGame', () => {
     expect(idGenerator.generate).toHaveBeenCalledTimes(1)
   })
   it('should call GameRepository getByName method with correct parameters', async () => {
-    const sut = new AddGame(idGenerator, gameRepository, fileStorage)
-
     const input = {
       fileName: 'anyFileName',
       name: 'warzone'
@@ -54,7 +50,6 @@ describe('AddGame', () => {
     expect(gameRepository.getByName).toHaveBeenCalledWith('warzone')
   })
   it('should throw AddGameError if game already exists', async () => {
-    const sut = new AddGame(idGenerator, gameRepository, fileStorage)
     gameRepository.getByName.mockResolvedValueOnce(
       new Game('anyId', 'warzone', 'anyImage')
     )
@@ -68,8 +63,6 @@ describe('AddGame', () => {
     )
   })
   it('should call FileStorage upload method with correct parameters', async () => {
-    const sut = new AddGame(idGenerator, gameRepository, fileStorage)
-
     const input = {
       fileName: 'anyFileName',
       name: 'warzone'
