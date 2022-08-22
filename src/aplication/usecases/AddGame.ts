@@ -3,6 +3,7 @@ import { FileStorage } from '@/aplication/protocols/FileStorage'
 import { GameRepository } from '@/aplication/protocols/GameRepository'
 import { IDGenerator } from '@/aplication/protocols/IDGenerator'
 import { UseCase } from '@/aplication/protocols/UseCase'
+import { Game } from '@/domain/entities/Game'
 
 export class AddGame implements UseCase<Input> {
   constructor (
@@ -12,13 +13,13 @@ export class AddGame implements UseCase<Input> {
   ) {}
 
   async execute (input: Input): Promise<void> {
-    this.idGenerator.generate()
     const game = await this.gameRepository.getByName(input.name)
     if (game !== undefined) {
       throw new AddGameError(`game with name ${input.name} already exists`)
     }
-
-    await this.fileStorage.upload(input.fileName)
+    const id = this.idGenerator.generate()
+    const imgUrl = await this.fileStorage.upload(input.fileName)
+    await this.gameRepository.save(new Game(id, input.name, imgUrl))
   }
 }
 

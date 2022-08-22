@@ -18,7 +18,8 @@ describe('AddGame', () => {
     gameRepository = mock<GameRepository>()
     fileStorage = mock<FileStorage>()
     sut = new AddGame(idGenerator, gameRepository, fileStorage)
-
+    idGenerator.generate.mockReturnValue('anyId')
+    fileStorage.upload.mockResolvedValue('imgUrl')
     gameRepository.getByName.mockResolvedValue(undefined)
   })
 
@@ -70,5 +71,17 @@ describe('AddGame', () => {
     await sut.execute(input)
 
     expect(fileStorage.upload).toHaveBeenCalledWith('anyFileName')
+  })
+  it('should call GameRepository save method with correct game instance', async () => {
+    const input = {
+      fileName: 'anyFileName',
+      name: 'warzone'
+    }
+
+    await sut.execute(input)
+
+    expect(gameRepository.save).toHaveBeenCalledWith(
+      new Game('anyId', 'warzone', 'imgUrl')
+    )
   })
 })
