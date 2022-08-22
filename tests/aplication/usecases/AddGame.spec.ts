@@ -28,8 +28,7 @@ describe('AddGame', () => {
       name: 'warzone'
     }
 
-    const output = await sut.execute(input)
-    expect(output.status).toBe('created')
+    await sut.execute(input)
   })
   it('should call id generator', async () => {
     const input = {
