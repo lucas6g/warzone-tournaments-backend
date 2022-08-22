@@ -13,8 +13,10 @@ export class Tournament {
     private readonly registrationCoust: number,
     private readonly killDeathRatioLimit: number,
     private readonly game: Game,
+    private readonly description: string,
     private readonly mode: string,
     private readonly type: TournamentType,
+
     private readonly teamSubscriptions: TeamSubscription[] = []
   ) {
     if (!this.isValidDate(startAt) || !this.isValidDate(endAt)) {

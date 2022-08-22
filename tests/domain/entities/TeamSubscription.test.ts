@@ -60,6 +60,7 @@ describe('TeamSubscription', () => {
       5,
       1.5,
       game,
+      'anyDescription',
       'anyMode',
       TournamentType.TRIOS
     )
