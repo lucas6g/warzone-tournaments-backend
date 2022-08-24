@@ -1,8 +1,8 @@
 import { UseCase } from '@/aplication/protocols/UseCase'
 
-export class CreateTournaments implements UseCase<Input[], Output> {
-  async execute (input: Input[]): Promise<Output> {
-    return await Promise.resolve({ status: 'created' })
+export class CreateTournaments implements UseCase<Input[]> {
+  async execute (input: Input[]): Promise<void> {
+    return await Promise.resolve()
   }
 }
 
@@ -11,8 +11,8 @@ type Input = {
   endsAt: Date
   registrationCoust: number
   killDeathRatioLimit: number
+  description: string
+  mode: string
+  type: number
   gameName: string
-}
-type Output = {
-  status: string
 }

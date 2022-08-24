@@ -14,6 +14,7 @@ export class Tournament {
     private readonly killDeathRatioLimit: number,
     private readonly game: Game,
     private readonly description: string,
+    private readonly map: string,
     private readonly mode: string,
     private readonly type: TournamentType,
 

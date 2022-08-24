@@ -55,6 +55,7 @@ describe('Tournament', () => {
       1.5,
       game,
       'anyDescription',
+      'anyMap',
       'anyMode',
       TournamentType.TRIOS
     )
@@ -120,6 +121,7 @@ describe('Tournament', () => {
           1.5,
           game,
           'anyDescription',
+          'anyMap',
           'anyMode',
           TournamentType.TRIOS
         )
@@ -139,6 +141,7 @@ describe('Tournament', () => {
           1.5,
           game,
           'anyDescription',
+          'anyMap',
           'anyMode',
           TournamentType.TRIOS
         )
