@@ -1,16 +1,20 @@
+import { GameRepository } from '@/aplication/protocols/GameRepository'
 import {
   CreateTournaments,
   Input
 } from '@/aplication/usecases/CreateTournaments'
+import { mock, MockProxy } from 'jest-mock-extended'
 import { set } from 'mockdate'
 
 describe('CreateTournaments', () => {
+  let gameRepository: MockProxy<GameRepository>
   let input: Input[]
   beforeAll(() => {
     set(new Date('2022-07-16T00:00:00'))
   })
 
   beforeEach(() => {
+    gameRepository = mock<GameRepository>()
     input = [
       {
         startAt: new Date('2022-08-16T10:00:00'),
@@ -76,8 +80,15 @@ describe('CreateTournaments', () => {
   })
 
   it('should create new Tournaments', async () => {
-    const sut = new CreateTournaments()
+    const sut = new CreateTournaments(gameRepository)
 
     await expect(sut.execute(input)).resolves.toBe(undefined)
+  })
+  it('should CreateTournoments calls GameRepository findByGivenNames method with correct parameters', async () => {
+    const sut = new CreateTournaments(gameRepository)
+
+    await sut.execute(input)
+
+    expect(gameRepository.findByGivenNames).toHaveBeenCalledWith(['warzone'])
   })
 })
