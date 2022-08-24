@@ -1,12 +1,17 @@
-import { CreateTournaments } from '@/aplication/usecases/CreateTournaments'
+import {
+  CreateTournaments,
+  Input
+} from '@/aplication/usecases/CreateTournaments'
 import { set } from 'mockdate'
 
 describe('CreateTournaments', () => {
+  let input: Input[]
   beforeAll(() => {
     set(new Date('2022-07-16T00:00:00'))
   })
-  it('should create new Tournaments', async () => {
-    const input = [
+
+  beforeEach(() => {
+    input = [
       {
         startAt: new Date('2022-08-16T10:00:00'),
         endsAt: new Date('2022-08-16T12:00:00'),
@@ -68,7 +73,9 @@ describe('CreateTournaments', () => {
         gameName: 'warzone'
       }
     ]
+  })
 
+  it('should create new Tournaments', async () => {
     const sut = new CreateTournaments()
 
     await expect(sut.execute(input)).resolves.toBe(undefined)

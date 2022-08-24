@@ -6,7 +6,7 @@ export class CreateTournaments implements UseCase<Input[]> {
   }
 }
 
-type Input = {
+export type Input = {
   startAt: Date
   endsAt: Date
   registrationCoust: number
