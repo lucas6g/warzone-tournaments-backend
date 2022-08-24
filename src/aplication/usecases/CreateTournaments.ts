@@ -1,3 +1,4 @@
+import { CreateTournamentsError } from '@/aplication/errors/CreateTournamentsError'
 import { GameRepository } from '@/aplication/protocols/GameRepository'
 import { UseCase } from '@/aplication/protocols/UseCase'
 
@@ -9,7 +10,10 @@ export class CreateTournaments implements UseCase<Input[]> {
       return input.gameName
     })
     const uniqueGameNames = [...new Set(gameNames)]
-    await this.gameRepository.findByGivenNames(uniqueGameNames)
+    const games = await this.gameRepository.findByGivenNames(uniqueGameNames)
+    if (games === undefined) {
+      throw new CreateTournamentsError('Games not found')
+    }
 
     return await Promise.resolve()
   }

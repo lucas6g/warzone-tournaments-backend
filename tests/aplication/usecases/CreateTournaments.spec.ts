@@ -1,8 +1,10 @@
+import { CreateTournamentsError } from '@/aplication/errors/CreateTournamentsError'
 import { GameRepository } from '@/aplication/protocols/GameRepository'
 import {
   CreateTournaments,
   Input
 } from '@/aplication/usecases/CreateTournaments'
+import { Game } from '@/domain/entities/Game'
 import { mock, MockProxy } from 'jest-mock-extended'
 import { set } from 'mockdate'
 
@@ -15,6 +17,10 @@ describe('CreateTournaments', () => {
 
   beforeEach(() => {
     gameRepository = mock<GameRepository>()
+
+    gameRepository.findByGivenNames.mockResolvedValue([
+      new Game('anyId', 'warzone', 'anyImage')
+    ])
     input = [
       {
         startAt: new Date('2022-08-16T10:00:00'),
@@ -90,5 +96,13 @@ describe('CreateTournaments', () => {
     await sut.execute(input)
 
     expect(gameRepository.findByGivenNames).toHaveBeenCalledWith(['warzone'])
+  })
+  it('should throw CreateTournamentsError when GameRepository findByGivenNames returns no game', async () => {
+    gameRepository.findByGivenNames.mockResolvedValueOnce(undefined)
+    const sut = new CreateTournaments(gameRepository)
+
+    await expect(sut.execute(input)).rejects.toThrow(
+      new CreateTournamentsError('Games not found')
+    )
   })
 })
