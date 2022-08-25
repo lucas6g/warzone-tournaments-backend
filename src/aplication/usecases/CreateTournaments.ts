@@ -1,9 +1,16 @@
 import { CreateTournamentsError } from '@/aplication/errors/CreateTournamentsError'
 import { GameRepository } from '@/aplication/protocols/GameRepository'
+import { IDGenerator } from '@/aplication/protocols/IDGenerator'
+import { TournamentRepository } from '@/aplication/protocols/TournamentRepository'
 import { UseCase } from '@/aplication/protocols/UseCase'
+import { Tournament } from '@/domain/entities/Tournament'
 
 export class CreateTournaments implements UseCase<Input[]> {
-  constructor (private readonly gameRepository: GameRepository) {}
+  constructor (
+    private readonly gameRepository: GameRepository,
+    private readonly idGenerator: IDGenerator,
+    private readonly tournamentRepository: TournamentRepository
+  ) {}
 
   async execute (input: Input[]): Promise<void> {
     const gameNames = input.map(input => {
@@ -15,7 +22,33 @@ export class CreateTournaments implements UseCase<Input[]> {
       throw new CreateTournamentsError('Games not found')
     }
 
-    return await Promise.resolve()
+    const tournaments: Tournament[] = []
+
+    for (const tournamentInput of input) {
+      const game = games.find(game => {
+        return game.getName() === tournamentInput.gameName
+      })
+
+      if (game != null) {
+        const tournamentId = this.idGenerator.generate()
+
+        tournaments.push(
+          new Tournament(
+            tournamentId,
+            tournamentInput.startAt,
+            tournamentInput.endsAt,
+            tournamentInput.registrationCoust,
+            tournamentInput.killDeathRatioLimit,
+            game,
+            tournamentInput.description,
+            tournamentInput.map,
+            tournamentInput.mode,
+            tournamentInput.type
+          )
+        )
+      }
+    }
+    await this.tournamentRepository.saveAll(tournaments)
   }
 }
 
@@ -27,5 +60,6 @@ export type Input = {
   description: string
   mode: string
   type: number
+  map: string
   gameName: string
 }
