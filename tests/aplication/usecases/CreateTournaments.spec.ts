@@ -17,6 +17,7 @@ describe('CreateTournaments', () => {
   let idGenerator: MockProxy<IDGenerator>
   let tournamentRepository: MockProxy<TournamentRepository>
   let input: Input[]
+  let sut: CreateTournaments
   beforeAll(() => {
     set(new Date('2022-07-16T00:00:00'))
   })
@@ -25,10 +26,18 @@ describe('CreateTournaments', () => {
     gameRepository = mock<GameRepository>()
     idGenerator = mock<IDGenerator>()
     tournamentRepository = mock<TournamentRepository>()
+
     gameRepository.findByGivenNames.mockResolvedValue([
       new Game('anyId', 'warzone', 'anyImage')
     ])
     idGenerator.generate.mockReturnValue('anyTournamentId')
+
+    sut = new CreateTournaments(
+      gameRepository,
+      idGenerator,
+      tournamentRepository
+    )
+
     input = [
       {
         startAt: new Date('2022-08-16T10:00:00'),
@@ -100,53 +109,25 @@ describe('CreateTournaments', () => {
   })
 
   it('should create new Tournaments', async () => {
-    const sut = new CreateTournaments(
-      gameRepository,
-      idGenerator,
-      tournamentRepository
-    )
-
     await expect(sut.execute(input)).resolves.toBe(undefined)
   })
   it('should CreateTournoments calls GameRepository findByGivenNames method with correct parameters', async () => {
-    const sut = new CreateTournaments(
-      gameRepository,
-      idGenerator,
-      tournamentRepository
-    )
-
     await sut.execute(input)
 
     expect(gameRepository.findByGivenNames).toHaveBeenCalledWith(['warzone'])
   })
   it('should throw CreateTournamentsError when GameRepository findByGivenNames returns no game', async () => {
     gameRepository.findByGivenNames.mockResolvedValueOnce(undefined)
-    const sut = new CreateTournaments(
-      gameRepository,
-      idGenerator,
-      tournamentRepository
-    )
 
     await expect(sut.execute(input)).rejects.toThrow(
       new CreateTournamentsError('Games not found')
     )
   })
   it('should CreateTournaments calls IdGenerator generate method', async () => {
-    const sut = new CreateTournaments(
-      gameRepository,
-      idGenerator,
-      tournamentRepository
-    )
     await sut.execute(input)
     expect(idGenerator.generate).toHaveBeenCalledTimes(6)
   })
   it('should CreateTournaments calls TournamentRepository saveAll with correct parameters', async () => {
-    const sut = new CreateTournaments(
-      gameRepository,
-      idGenerator,
-      tournamentRepository
-    )
-
     await sut.execute(input)
 
     const game = new Game('anyId', 'warzone', 'anyImage')
