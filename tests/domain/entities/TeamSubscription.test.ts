@@ -31,7 +31,6 @@ describe('TeamSubscription', () => {
       'anyTeamLogo',
       new Player(
         'anyId',
-        'anyName',
         'anyEmail',
         'anyPassword',
         1.2,
@@ -42,7 +41,6 @@ describe('TeamSubscription', () => {
     )
     commomPlayer = new Player(
       'anyId',
-      'anyName',
       'anyEmail',
       'anyPassword',
       1.6,

@@ -13,7 +13,6 @@ describe('Team', () => {
       'anyLogo',
       new Player(
         'leaderId',
-        'anyName',
         'anyEmail',
         'anyPassword',
         1.2,
@@ -33,7 +32,6 @@ describe('Team', () => {
     sut.addPlayer(
       new Player(
         'leaderId',
-        'anyName',
         'anyEmail',
         'anyPassword',
         1.2,

@@ -1,7 +1,6 @@
 export class Player {
   constructor (
     private readonly id: string,
-    private readonly name: string,
     private readonly email: string,
     private readonly password: string,
     private readonly kdLevel: number,
@@ -12,10 +11,6 @@ export class Player {
 
   getKdLevel (): number {
     return this.kdLevel
-  }
-
-  getName (): string {
-    return this.name
   }
 
   getId (): string {

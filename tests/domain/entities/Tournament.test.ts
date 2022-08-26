@@ -32,7 +32,6 @@ describe('Tournament', () => {
   beforeEach(() => {
     player = new Player(
       'anyId',
-      'anyName',
       'anyEmail',
       'anyPassword',
       1.2,
