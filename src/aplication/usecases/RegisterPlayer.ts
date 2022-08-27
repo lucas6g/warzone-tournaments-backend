@@ -20,7 +20,11 @@ export class RegisterPlayer implements UseCase<Input, Output> {
         `account with gamertag: ${input.gamertag} and platform: ${input.platform} was not found`
       )
     }
-    await this.playerRepository.findByEmail(input.email)
+    const player = await this.playerRepository.findByEmail(input.email)
+
+    if (player !== undefined) {
+      throw new RegisterPlayerError(`email: ${input.email} is already in use`)
+    }
 
     return await Promise.resolve({ accessToken: 'anyAccessToken' })
   }
