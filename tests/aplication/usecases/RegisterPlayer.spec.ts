@@ -1,3 +1,4 @@
+import { RegisterPlayerError } from '@/aplication/errors/RegisterPlayerError'
 import { CodAPI } from '@/aplication/protocols/CodAPI'
 import { Input, RegisterPlayer } from '@/aplication/usecases/RegisterPlayer'
 import { mock, MockProxy } from 'jest-mock-extended'
@@ -16,6 +17,7 @@ describe('RegisterPlayer', () => {
     }
     codAPI = mock<CodAPI>()
     sut = new RegisterPlayer(codAPI)
+    codAPI.hasAccount.mockResolvedValue(true)
   })
 
   it('should register a player', async () => {
@@ -27,5 +29,14 @@ describe('RegisterPlayer', () => {
     await sut.execute(input)
 
     expect(codAPI.hasAccount).toHaveBeenCalledWith('anyGamerTag', 'anyPlatform')
+  })
+  it('should throw RegisterPlayerError if hasAccount method returns false', async () => {
+    codAPI.hasAccount.mockResolvedValueOnce(false)
+
+    await expect(sut.execute(input)).rejects.toThrow(
+      new RegisterPlayerError(
+        'account with gamertag: anyGamerTag and platform: anyPlatform was not found'
+      )
+    )
   })
 })
