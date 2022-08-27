@@ -11,7 +11,7 @@ export class RegisterPlayer implements UseCase<Input, Output> {
   }
 }
 
-type Input = {
+export type Input = {
   gamertag: string
   platform: string
   email: string
