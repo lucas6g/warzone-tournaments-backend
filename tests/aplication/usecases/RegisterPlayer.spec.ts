@@ -1,5 +1,6 @@
 import { RegisterPlayerError } from '@/aplication/errors/RegisterPlayerError'
 import { CodAPI } from '@/aplication/protocols/gateways/CodAPI'
+import { Hasher } from '@/aplication/protocols/Hasher'
 import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepository'
 
 import { Input, RegisterPlayer } from '@/aplication/usecases/RegisterPlayer'
@@ -10,6 +11,7 @@ describe('RegisterPlayer', () => {
   let codAPI: MockProxy<CodAPI>
   let playerRepository: MockProxy<PlayerRepository>
   let input: Input
+  let hasher: MockProxy<Hasher>
   let sut: RegisterPlayer
 
   beforeEach(() => {
@@ -23,8 +25,10 @@ describe('RegisterPlayer', () => {
 
     codAPI = mock<CodAPI>()
     playerRepository = mock<PlayerRepository>()
-    sut = new RegisterPlayer(codAPI, playerRepository)
+    hasher = mock<Hasher>()
+    sut = new RegisterPlayer(codAPI, playerRepository, hasher)
     codAPI.hasAccount.mockResolvedValue(true)
+    playerRepository.findByEmail.mockResolvedValue(undefined)
   })
 
   it('should register a player', async () => {
@@ -68,5 +72,10 @@ describe('RegisterPlayer', () => {
     await expect(sut.execute(input)).rejects.toThrow(
       new RegisterPlayerError('email: anyEmail@gmail.com is already in use')
     )
+  })
+  it('should call Hasher hash method with player password', async () => {
+    await sut.execute(input)
+
+    expect(hasher.hash).toHaveBeenCalledWith('anyPassword')
   })
 })

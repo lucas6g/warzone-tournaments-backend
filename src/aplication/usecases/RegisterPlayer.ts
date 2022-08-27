@@ -1,5 +1,6 @@
 import { RegisterPlayerError } from '@/aplication/errors/RegisterPlayerError'
 import { CodAPI } from '@/aplication/protocols/gateways/CodAPI'
+import { Hasher } from '@/aplication/protocols/Hasher'
 import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepository'
 
 import { UseCase } from '@/aplication/protocols/UseCase'
@@ -7,7 +8,8 @@ import { UseCase } from '@/aplication/protocols/UseCase'
 export class RegisterPlayer implements UseCase<Input, Output> {
   constructor (
     private readonly codAPI: CodAPI,
-    private readonly playerRepository: PlayerRepository
+    private readonly playerRepository: PlayerRepository,
+    private readonly hasher: Hasher
   ) {}
 
   async execute (input: Input): Promise<Output> {
@@ -25,6 +27,7 @@ export class RegisterPlayer implements UseCase<Input, Output> {
     if (player !== undefined) {
       throw new RegisterPlayerError(`email: ${input.email} is already in use`)
     }
+    this.hasher.hash(input.password)
 
     return await Promise.resolve({ accessToken: 'anyAccessToken' })
   }
