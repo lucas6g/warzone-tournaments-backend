@@ -1,6 +1,7 @@
 import { RegisterPlayerError } from '@/aplication/errors/RegisterPlayerError'
-import { CodAPI } from '@/aplication/protocols/CodAPI'
-import { PlayerRepository } from '@/aplication/protocols/PlayerRepository'
+import { CodAPI } from '@/aplication/protocols/gateways/CodAPI'
+import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepository'
+
 import { UseCase } from '@/aplication/protocols/UseCase'
 
 export class RegisterPlayer implements UseCase<Input, Output> {

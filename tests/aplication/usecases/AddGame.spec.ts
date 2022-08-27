@@ -1,7 +1,9 @@
 import { AddGameError } from '@/aplication/errors/AddGameError'
-import { FileStorage } from '@/aplication/protocols/FileStorage'
-import { GameRepository } from '@/aplication/protocols/GameRepository'
+import { FileStorage } from '@/aplication/protocols/gateways/FileStorage'
+
 import { IDGenerator } from '@/aplication/protocols/IDGenerator'
+import { GameRepository } from '@/aplication/protocols/repositories/GameRepository'
+
 import { AddGame } from '@/aplication/usecases/AddGame'
 import { Game } from '@/domain/entities/Game'
 

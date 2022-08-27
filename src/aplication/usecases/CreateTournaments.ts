@@ -1,7 +1,8 @@
 import { CreateTournamentsError } from '@/aplication/errors/CreateTournamentsError'
-import { GameRepository } from '@/aplication/protocols/GameRepository'
+
 import { IDGenerator } from '@/aplication/protocols/IDGenerator'
-import { TournamentRepository } from '@/aplication/protocols/TournamentRepository'
+import { GameRepository } from '@/aplication/protocols/repositories/GameRepository'
+import { TournamentRepository } from '@/aplication/protocols/repositories/TournamentRepository'
 import { UseCase } from '@/aplication/protocols/UseCase'
 import { Tournament } from '@/domain/entities/Tournament'
 

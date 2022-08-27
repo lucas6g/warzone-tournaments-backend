@@ -1,6 +1,7 @@
 import { RegisterPlayerError } from '@/aplication/errors/RegisterPlayerError'
-import { CodAPI } from '@/aplication/protocols/CodAPI'
-import { PlayerRepository } from '@/aplication/protocols/PlayerRepository'
+import { CodAPI } from '@/aplication/protocols/gateways/CodAPI'
+import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepository'
+
 import { Input, RegisterPlayer } from '@/aplication/usecases/RegisterPlayer'
 import { mock, MockProxy } from 'jest-mock-extended'
 
