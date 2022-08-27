@@ -34,7 +34,6 @@ describe('Tournament', () => {
       'anyId',
       'anyEmail',
       'anyPassword',
-      1.2,
       'anyPixkey',
       'anyGamerTag',
       'anyPlatForm'

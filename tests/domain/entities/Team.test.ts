@@ -15,7 +15,6 @@ describe('Team', () => {
         'leaderId',
         'anyEmail',
         'anyPassword',
-        1.2,
         'anyPixkey',
         'anyGamerTag',
         'anyPlatForm'
@@ -34,7 +33,6 @@ describe('Team', () => {
         'leaderId',
         'anyEmail',
         'anyPassword',
-        1.2,
         'anyPixkey',
         'anyGamerTag',
         'anyPlatForm'

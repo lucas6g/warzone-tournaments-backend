@@ -8,7 +8,6 @@ describe('Player', () => {
       'anyId',
       'anyEmail',
       'anyPassword',
-      1.5,
       'anyPixkey',
       'anyGamerTag',
       'anyPlatForm'
@@ -16,7 +15,7 @@ describe('Player', () => {
   })
 
   it('should create a player', () => {
-    expect(sut.getKdLevel()).toBe(1.5)
+    expect(sut.getId()).toBe('anyId')
   })
   it('should get player id', () => {
     expect(sut.getId()).toBe('anyId')

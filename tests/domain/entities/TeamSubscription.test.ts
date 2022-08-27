@@ -25,25 +25,20 @@ describe('TeamSubscription', () => {
   })
 
   beforeEach(() => {
-    team = new Team(
-      'anyTeamId',
-      'anyTeamName',
-      'anyTeamLogo',
-      new Player(
-        'anyId',
-        'anyEmail',
-        'anyPassword',
-        1.2,
-        'anyPixkey',
-        'anyGamerTag',
-        'anyPlatForm'
-      )
+    const leader = new Player(
+      'anyId',
+      'anyEmail',
+      'anyPassword',
+      'anyPixkey',
+      'anyGamerTag',
+      'anyPlatForm'
     )
+    team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo', leader)
+
     commomPlayer = new Player(
       'anyId',
       'anyEmail',
       'anyPassword',
-      1.6,
       'anyPixkey',
       'anyGamerTag',
       'anyPlatForm'
@@ -104,6 +99,7 @@ describe('TeamSubscription', () => {
   it('should not subscribe a Team to a Tournament if team member kd level is bigger than Tounament killDeathRatioLimit ', () => {
     const player1 = new TeamPlayer(commomPlayer, 'anyTeamId', PlayerRole.COMMON)
     const player2 = new TeamPlayer(commomPlayer, 'anyTeamId', PlayerRole.COMMON)
+    player1.setKdLevel(2)
 
     jest.spyOn(team, 'getTeamPlayers').mockReturnValueOnce([player1, player2])
 
