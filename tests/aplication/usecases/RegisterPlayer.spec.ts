@@ -1,6 +1,7 @@
 import { RegisterPlayerError } from '@/aplication/errors/RegisterPlayerError'
 import { CodAPI } from '@/aplication/protocols/gateways/CodAPI'
 import { Hasher } from '@/aplication/protocols/Hasher'
+import { IDGenerator } from '@/aplication/protocols/IDGenerator'
 import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepository'
 
 import { Input, RegisterPlayer } from '@/aplication/usecases/RegisterPlayer'
@@ -9,6 +10,7 @@ import { mock, MockProxy } from 'jest-mock-extended'
 
 describe('RegisterPlayer', () => {
   let codAPI: MockProxy<CodAPI>
+  let idGenerator: MockProxy<IDGenerator>
   let playerRepository: MockProxy<PlayerRepository>
   let input: Input
   let hasher: MockProxy<Hasher>
@@ -23,10 +25,11 @@ describe('RegisterPlayer', () => {
       pixKey: 'anyPixkey'
     }
 
+    idGenerator = mock<IDGenerator>()
     codAPI = mock<CodAPI>()
     playerRepository = mock<PlayerRepository>()
     hasher = mock<Hasher>()
-    sut = new RegisterPlayer(codAPI, playerRepository, hasher)
+    sut = new RegisterPlayer(codAPI, playerRepository, hasher, idGenerator)
     codAPI.hasAccount.mockResolvedValue(true)
     playerRepository.findByEmail.mockResolvedValue(undefined)
   })
@@ -77,5 +80,10 @@ describe('RegisterPlayer', () => {
     await sut.execute(input)
 
     expect(hasher.hash).toHaveBeenCalledWith('anyPassword')
+  })
+  it('should call IdGenerator generate method method', async () => {
+    await sut.execute(input)
+
+    expect(idGenerator.generate).toHaveBeenCalledTimes(1)
   })
 })
