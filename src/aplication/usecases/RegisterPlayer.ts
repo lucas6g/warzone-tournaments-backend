@@ -6,6 +6,7 @@ import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepo
 import { TokenGenerator } from '@/aplication/protocols/TokenGenerator'
 
 import { UseCase } from '@/aplication/protocols/UseCase'
+import { Player } from '@/domain/entities/Player'
 
 export class RegisterPlayer implements UseCase<Input, Output> {
   constructor (
@@ -31,12 +32,24 @@ export class RegisterPlayer implements UseCase<Input, Output> {
     if (player !== undefined) {
       throw new RegisterPlayerError(`email: ${input.email} is already in use`)
     }
-    this.hasher.hash(input.password)
+    const hashedPassword = this.hasher.hash(input.password)
 
     const playerId = this.idGenerator.generate()
-    this.tokenGenerator.generate(playerId)
+    const token = this.tokenGenerator.generate(playerId)
 
-    return await Promise.resolve({ accessToken: 'anyAccessToken' })
+    await this.playerRepository.save(
+      new Player(
+        playerId,
+        input.email,
+        hashedPassword,
+        input.pixKey,
+        input.gamertag,
+        input.platform
+      )
+    )
+    return {
+      accessToken: token
+    }
   }
 }
 

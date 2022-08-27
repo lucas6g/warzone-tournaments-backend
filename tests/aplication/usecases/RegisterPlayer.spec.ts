@@ -21,7 +21,7 @@ describe('RegisterPlayer', () => {
   beforeEach(() => {
     input = {
       gamertag: 'anyGamerTag',
-      platform: 'anyPlatform',
+      platform: 'anyPlatForm',
       email: 'anyEmail@gmail.com',
       password: 'anyPassword',
       pixKey: 'anyPixkey'
@@ -39,6 +39,8 @@ describe('RegisterPlayer', () => {
       idGenerator,
       tokenGenerator
     )
+
+    tokenGenerator.generate.mockReturnValue('anyAccessToken')
     codAPI.hasAccount.mockResolvedValue(true)
     playerRepository.findByEmail.mockResolvedValue(undefined)
     idGenerator.generate.mockReturnValue('anyId')
@@ -52,14 +54,14 @@ describe('RegisterPlayer', () => {
   it('should call CodAPI hasAccount method with correct gamertag and platform', async () => {
     await sut.execute(input)
 
-    expect(codAPI.hasAccount).toHaveBeenCalledWith('anyGamerTag', 'anyPlatform')
+    expect(codAPI.hasAccount).toHaveBeenCalledWith('anyGamerTag', 'anyPlatForm')
   })
   it('should throw RegisterPlayerError if hasAccount method returns false', async () => {
     codAPI.hasAccount.mockResolvedValueOnce(false)
 
     await expect(sut.execute(input)).rejects.toThrow(
       new RegisterPlayerError(
-        'account with gamertag: anyGamerTag and platform: anyPlatform was not found'
+        'account with gamertag: anyGamerTag and platform: anyPlatForm was not found'
       )
     )
   })
@@ -100,5 +102,21 @@ describe('RegisterPlayer', () => {
     await sut.execute(input)
 
     expect(tokenGenerator.generate).toBeCalledWith('anyId')
+  })
+  it('should call PlayerRepository save method with correct player instance', async () => {
+    hasher.hash.mockReturnValueOnce('hashedPassword')
+
+    await sut.execute(input)
+
+    expect(playerRepository.save).toHaveBeenCalledWith(
+      new Player(
+        'anyId',
+        'anyEmail@gmail.com',
+        'hashedPassword',
+        'anyPixkey',
+        'anyGamerTag',
+        'anyPlatForm'
+      )
+    )
   })
 })
