@@ -3,6 +3,7 @@ import { CodAPI } from '@/aplication/protocols/gateways/CodAPI'
 import { Hasher } from '@/aplication/protocols/Hasher'
 import { IDGenerator } from '@/aplication/protocols/IDGenerator'
 import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepository'
+import { TokenGenerator } from '@/aplication/protocols/TokenGenerator'
 
 import { Input, RegisterPlayer } from '@/aplication/usecases/RegisterPlayer'
 import { Player } from '@/domain/entities/Player'
@@ -12,6 +13,7 @@ describe('RegisterPlayer', () => {
   let codAPI: MockProxy<CodAPI>
   let idGenerator: MockProxy<IDGenerator>
   let playerRepository: MockProxy<PlayerRepository>
+  let tokenGenerator: MockProxy<TokenGenerator>
   let input: Input
   let hasher: MockProxy<Hasher>
   let sut: RegisterPlayer
@@ -27,11 +29,19 @@ describe('RegisterPlayer', () => {
 
     idGenerator = mock<IDGenerator>()
     codAPI = mock<CodAPI>()
+    tokenGenerator = mock<TokenGenerator>()
     playerRepository = mock<PlayerRepository>()
     hasher = mock<Hasher>()
-    sut = new RegisterPlayer(codAPI, playerRepository, hasher, idGenerator)
+    sut = new RegisterPlayer(
+      codAPI,
+      playerRepository,
+      hasher,
+      idGenerator,
+      tokenGenerator
+    )
     codAPI.hasAccount.mockResolvedValue(true)
     playerRepository.findByEmail.mockResolvedValue(undefined)
+    idGenerator.generate.mockReturnValue('anyId')
   })
 
   it('should register a player', async () => {
@@ -85,5 +95,10 @@ describe('RegisterPlayer', () => {
     await sut.execute(input)
 
     expect(idGenerator.generate).toHaveBeenCalledTimes(1)
+  })
+  it('should call TokenGenerator generate with correct player id', async () => {
+    await sut.execute(input)
+
+    expect(tokenGenerator.generate).toBeCalledWith('anyId')
   })
 })

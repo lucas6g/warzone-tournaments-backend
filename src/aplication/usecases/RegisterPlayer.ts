@@ -3,6 +3,7 @@ import { CodAPI } from '@/aplication/protocols/gateways/CodAPI'
 import { Hasher } from '@/aplication/protocols/Hasher'
 import { IDGenerator } from '@/aplication/protocols/IDGenerator'
 import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepository'
+import { TokenGenerator } from '@/aplication/protocols/TokenGenerator'
 
 import { UseCase } from '@/aplication/protocols/UseCase'
 
@@ -11,7 +12,8 @@ export class RegisterPlayer implements UseCase<Input, Output> {
     private readonly codAPI: CodAPI,
     private readonly playerRepository: PlayerRepository,
     private readonly hasher: Hasher,
-    private readonly idGenerator: IDGenerator
+    private readonly idGenerator: IDGenerator,
+    private readonly tokenGenerator: TokenGenerator
   ) {}
 
   async execute (input: Input): Promise<Output> {
@@ -30,7 +32,9 @@ export class RegisterPlayer implements UseCase<Input, Output> {
       throw new RegisterPlayerError(`email: ${input.email} is already in use`)
     }
     this.hasher.hash(input.password)
-    this.idGenerator.generate()
+
+    const playerId = this.idGenerator.generate()
+    this.tokenGenerator.generate(playerId)
 
     return await Promise.resolve({ accessToken: 'anyAccessToken' })
   }
