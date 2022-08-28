@@ -1,4 +1,5 @@
 import { CreateTeamError } from '@/aplication/errors/CreateTeamError'
+import { FileStorage } from '@/aplication/protocols/gateways/FileStorage'
 import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepository'
 import { CreateTeam } from '@/aplication/usecases/CreateTeam'
 import { Player } from '@/domain/entities/Player'
@@ -7,9 +8,12 @@ import { mock, MockProxy } from 'jest-mock-extended'
 describe('CreateTeam', () => {
   let sut: CreateTeam
   let playerRepository: MockProxy<PlayerRepository>
+  let fileStorage: MockProxy<FileStorage>
   beforeEach(() => {
     playerRepository = mock<PlayerRepository>()
-    sut = new CreateTeam(playerRepository)
+    fileStorage = mock<FileStorage>()
+    sut = new CreateTeam(playerRepository, fileStorage)
+
     playerRepository.findById.mockResolvedValue(
       new Player(
         'anyId',
@@ -60,5 +64,16 @@ describe('CreateTeam', () => {
     await expect(sut.execute(input)).rejects.toThrow(
       new CreateTeamError('player not found')
     )
+  })
+  it('should call FileStorage upload method with  correct logo filename', async () => {
+    const input = {
+      playerId: 'anyPlayerId',
+      name: 'anyTeamName',
+      logo: 'anyTeamLogo'
+    }
+
+    await sut.execute(input)
+
+    expect(fileStorage.upload).toHaveBeenCalledWith('anyTeamLogo')
   })
 })
