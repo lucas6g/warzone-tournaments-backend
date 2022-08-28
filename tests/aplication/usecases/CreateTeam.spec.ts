@@ -2,8 +2,10 @@ import { CreateTeamError } from '@/aplication/errors/CreateTeamError'
 import { FileStorage } from '@/aplication/protocols/gateways/FileStorage'
 import { IDGenerator } from '@/aplication/protocols/IDGenerator'
 import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepository'
+import { TeamRepository } from '@/aplication/protocols/repositories/TeamRepository'
 import { CreateTeam } from '@/aplication/usecases/CreateTeam'
 import { Player } from '@/domain/entities/Player'
+import { Team } from '@/domain/entities/Team'
 import { mock, MockProxy } from 'jest-mock-extended'
 
 describe('CreateTeam', () => {
@@ -11,15 +13,22 @@ describe('CreateTeam', () => {
   let playerRepository: MockProxy<PlayerRepository>
   let fileStorage: MockProxy<FileStorage>
   let idGenerator: MockProxy<IDGenerator>
+  let teamRepository: MockProxy<TeamRepository>
   beforeEach(() => {
     playerRepository = mock<PlayerRepository>()
     fileStorage = mock<FileStorage>()
     idGenerator = mock<IDGenerator>()
-    sut = new CreateTeam(playerRepository, fileStorage, idGenerator)
+    teamRepository = mock<TeamRepository>()
+    sut = new CreateTeam(
+      playerRepository,
+      fileStorage,
+      idGenerator,
+      teamRepository
+    )
 
     playerRepository.findById.mockResolvedValue(
       new Player(
-        'anyId',
+        'anyPlayerId',
         'anyEmail@gmail.com',
         'hashedPassword',
         'anyPixkey',
@@ -27,6 +36,9 @@ describe('CreateTeam', () => {
         'anyPlatForm'
       )
     )
+
+    idGenerator.generate.mockReturnValue('anyId')
+    fileStorage.upload.mockResolvedValue('logoUrl')
   })
 
   it('should create a new Team', async () => {
@@ -39,9 +51,9 @@ describe('CreateTeam', () => {
     const output = await sut.execute(input)
 
     expect(output).toEqual({
-      id: 'anyTeamid',
+      id: 'anyId',
       name: 'anyTeamName',
-      logo: 'anyTeamLogo',
+      logo: 'logoUrl',
       playerId: 'anyPlayerId'
     })
   })
@@ -89,5 +101,30 @@ describe('CreateTeam', () => {
     await sut.execute(input)
 
     expect(idGenerator.generate).toHaveBeenCalledTimes(1)
+  })
+  it('should call TeamRepository save method with correct team instance', async () => {
+    const input = {
+      playerId: 'anyPlayerId',
+      name: 'anyTeamName',
+      logo: 'anyTeamLogo'
+    }
+
+    await sut.execute(input)
+
+    expect(teamRepository.save).toHaveBeenCalledWith(
+      new Team(
+        'anyId',
+        'anyTeamName',
+        'logoUrl',
+        new Player(
+          'anyPlayerId',
+          'anyEmail@gmail.com',
+          'hashedPassword',
+          'anyPixkey',
+          'anyGamerTag',
+          'anyPlatForm'
+        )
+      )
+    )
   })
 })

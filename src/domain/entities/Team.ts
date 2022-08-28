@@ -45,6 +45,10 @@ export class Team {
     return this.leader.getId()
   }
 
+  getLogo (): string {
+    return this.logo
+  }
+
   getName (): string {
     return this.name
   }
