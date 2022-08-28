@@ -1,12 +1,14 @@
 import { CreateTeamError } from '@/aplication/errors/CreateTeamError'
 import { FileStorage } from '@/aplication/protocols/gateways/FileStorage'
+import { IDGenerator } from '@/aplication/protocols/IDGenerator'
 import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepository'
 import { UseCase } from '@/aplication/protocols/UseCase'
 
 export class CreateTeam implements UseCase<Input, Output> {
   constructor (
     private readonly playerRepository: PlayerRepository,
-    private readonly fileStorage: FileStorage
+    private readonly fileStorage: FileStorage,
+    private readonly idGenerator: IDGenerator
   ) {}
 
   async execute (input: Input): Promise<Output> {
@@ -16,6 +18,8 @@ export class CreateTeam implements UseCase<Input, Output> {
       throw new CreateTeamError('player not found')
     }
     await this.fileStorage.upload(input.logo)
+    this.idGenerator.generate()
+
     return await Promise.resolve({
       id: 'anyTeamid',
       name: 'anyTeamName',

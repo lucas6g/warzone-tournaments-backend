@@ -1,5 +1,6 @@
 import { CreateTeamError } from '@/aplication/errors/CreateTeamError'
 import { FileStorage } from '@/aplication/protocols/gateways/FileStorage'
+import { IDGenerator } from '@/aplication/protocols/IDGenerator'
 import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepository'
 import { CreateTeam } from '@/aplication/usecases/CreateTeam'
 import { Player } from '@/domain/entities/Player'
@@ -9,10 +10,12 @@ describe('CreateTeam', () => {
   let sut: CreateTeam
   let playerRepository: MockProxy<PlayerRepository>
   let fileStorage: MockProxy<FileStorage>
+  let idGenerator: MockProxy<IDGenerator>
   beforeEach(() => {
     playerRepository = mock<PlayerRepository>()
     fileStorage = mock<FileStorage>()
-    sut = new CreateTeam(playerRepository, fileStorage)
+    idGenerator = mock<IDGenerator>()
+    sut = new CreateTeam(playerRepository, fileStorage, idGenerator)
 
     playerRepository.findById.mockResolvedValue(
       new Player(
@@ -75,5 +78,16 @@ describe('CreateTeam', () => {
     await sut.execute(input)
 
     expect(fileStorage.upload).toHaveBeenCalledWith('anyTeamLogo')
+  })
+  it('should call IDGenerator generate method', async () => {
+    const input = {
+      playerId: 'anyPlayerId',
+      name: 'anyTeamName',
+      logo: 'anyTeamLogo'
+    }
+
+    await sut.execute(input)
+
+    expect(idGenerator.generate).toHaveBeenCalledTimes(1)
   })
 })
