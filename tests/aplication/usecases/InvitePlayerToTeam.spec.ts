@@ -4,11 +4,11 @@ import { mock, MockProxy } from 'jest-mock-extended'
 
 describe('InvitePlayerToTeam', () => {
   let teamRepository: MockProxy<TeamRepository>
-  let sut: MockProxy<InvitePlayerToTeam>
+  let sut: InvitePlayerToTeam
 
   beforeEach(() => {
     teamRepository = mock<TeamRepository>()
-    sut = mock<InvitePlayerToTeam>()
+    sut = new InvitePlayerToTeam(teamRepository)
   })
 
   it('should invite a player to a team', async () => {
