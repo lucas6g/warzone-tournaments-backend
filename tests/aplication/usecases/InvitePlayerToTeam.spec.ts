@@ -4,14 +4,14 @@ import { mock, MockProxy } from 'jest-mock-extended'
 
 describe('InvitePlayerToTeam', () => {
   let teamRepository: MockProxy<TeamRepository>
+  let sut: MockProxy<InvitePlayerToTeam>
 
   beforeEach(() => {
     teamRepository = mock<TeamRepository>()
+    sut = mock<InvitePlayerToTeam>()
   })
 
   it('should invite a player to a team', async () => {
-    const sut = new InvitePlayerToTeam(teamRepository)
-
     const input = {
       teamId: 'anyTeamId',
       gamertag: 'anygamertag',
@@ -21,8 +21,6 @@ describe('InvitePlayerToTeam', () => {
     await expect(sut.execute(input)).resolves.toBe(undefined)
   })
   it('should call TeamRepository findById method with correct teamId id', async () => {
-    const sut = new InvitePlayerToTeam(teamRepository)
-
     const input = {
       teamId: 'anyTeamId',
       gamertag: 'anygamertag',
