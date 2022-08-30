@@ -1,3 +1,4 @@
+import { AcceptTeamInviteError } from '@/aplication/errors/AcceptTeamInviteError'
 import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepository'
 import { TeamInviteRepository } from '@/aplication/protocols/repositories/TeamInviteRepository'
 import { TeamRepository } from '@/aplication/protocols/repositories/TeamRepository'
@@ -47,6 +48,17 @@ describe('AcceptTeamInvite', () => {
       'anyTeamInviteId'
     )
   })
+  it('should trown  AcceptTeamInviteError if TeamInviteRepository findById method returns undefined', async () => {
+    teamInviteRepository.findById.mockResolvedValueOnce(undefined)
+
+    const input = {
+      teamInviteId: 'anyTeamInviteId'
+    }
+
+    await expect(sut.execute(input)).rejects.toThrow(
+      new AcceptTeamInviteError('TeamInvite not found')
+    )
+  })
   it('should call PlayerRepository findById method with correct playerId', async () => {
     const input = {
       teamInviteId: 'anyTeamInviteId'
@@ -64,5 +76,19 @@ describe('AcceptTeamInvite', () => {
     await sut.execute(input)
 
     expect(teamRepository.findById).toHaveBeenCalledWith('anyTeamId')
+  })
+  it('should call TeamRepository delete method with correct teamInviteInstace', async () => {
+    const input = {
+      teamInviteId: 'anyTeamInviteId'
+    }
+
+    await sut.execute(input)
+
+    expect(teamInviteRepository.delete).toHaveBeenCalledWith({
+      id: 'anyTeamInviteId',
+      playerId: 'anyPlayerId',
+      status: 'accepted',
+      teamId: 'anyTeamId'
+    })
   })
 })

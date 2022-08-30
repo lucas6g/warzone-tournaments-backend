@@ -1,3 +1,4 @@
+import { AcceptTeamInviteError } from '@/aplication/errors/AcceptTeamInviteError'
 import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepository'
 import { TeamInviteRepository } from '@/aplication/protocols/repositories/TeamInviteRepository'
 import { TeamRepository } from '@/aplication/protocols/repositories/TeamRepository'
@@ -14,9 +15,24 @@ export class AcceptTeamInvite implements UseCase<Input, Output> {
     const teamInvite = await this.teamInviteRepository.findById(
       input.teamInviteId
     )
-    await this.playerRepository.findById(String(teamInvite?.getPlayerId()))
-    await this.teamRepository.findById(String(teamInvite?.getTeamId()))
-    return await Promise.resolve({ status: 'accepted' })
+
+    if (teamInvite === undefined) {
+      throw new AcceptTeamInviteError('TeamInvite not found')
+    }
+
+    const player = await this.playerRepository.findById(
+      teamInvite.getPlayerId()
+    )
+    const team = await this.teamRepository.findById(teamInvite.getTeamId())
+    teamInvite.setStatus('accepted')
+    if (player !== undefined) {
+      team?.addPlayer(player)
+    }
+    await this.teamInviteRepository.delete(teamInvite)
+
+    return {
+      status: teamInvite?.getStatus()
+    }
   }
 }
 
