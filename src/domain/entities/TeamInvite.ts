@@ -19,4 +19,8 @@ export class TeamInvite {
   getStatus (): string {
     return this.status
   }
+
+  getPlayerId (): string {
+    return this.playerId
+  }
 }
