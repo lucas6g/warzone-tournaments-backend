@@ -4,14 +4,14 @@ import { mock, MockProxy } from 'jest-mock-extended'
 
 describe('AcceptTeamInvite', () => {
   let teamInviteRepository: MockProxy<TeamInviteRepository>
+  let sut: AcceptTeamInvite
 
   beforeEach(() => {
     teamInviteRepository = mock<TeamInviteRepository>()
+    sut = new AcceptTeamInvite(teamInviteRepository)
   })
 
   it('should accepte team invite', async () => {
-    const sut = new AcceptTeamInvite(teamInviteRepository)
-
     const input = {
       teamInviteId: 'anyId'
     }
@@ -21,8 +21,6 @@ describe('AcceptTeamInvite', () => {
     expect(output.status).toBe('accepted')
   })
   it('should call TeamInviteRepository findById method with correct teamInviteId', async () => {
-    const sut = new AcceptTeamInvite(teamInviteRepository)
-
     const input = {
       teamInviteId: 'anyTeamInviteId'
     }
