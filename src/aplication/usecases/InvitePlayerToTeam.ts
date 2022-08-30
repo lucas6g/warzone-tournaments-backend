@@ -1,4 +1,5 @@
 import { InvitePlayerToTeamError } from '@/aplication/errors/InvitePlayerToTeamError'
+import { IDGenerator } from '@/aplication/protocols/IDGenerator'
 import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepository'
 import { TeamRepository } from '@/aplication/protocols/repositories/TeamRepository'
 import { UseCase } from '@/aplication/protocols/UseCase'
@@ -6,7 +7,8 @@ import { UseCase } from '@/aplication/protocols/UseCase'
 export class InvitePlayerToTeam implements UseCase<Input> {
   constructor (
     private readonly teamRepository: TeamRepository,
-    private readonly playerRepository: PlayerRepository
+    private readonly playerRepository: PlayerRepository,
+    private readonly idGenerator: IDGenerator
   ) {}
 
   async execute (input: Input): Promise<void> {
@@ -20,6 +22,8 @@ export class InvitePlayerToTeam implements UseCase<Input> {
         `account with gamertag: ${input.gamertag} and platform: ${input.platform} was not found`
       )
     }
+
+    this.idGenerator.generate()
   }
 }
 
