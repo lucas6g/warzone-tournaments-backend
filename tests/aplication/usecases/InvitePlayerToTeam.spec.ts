@@ -38,19 +38,7 @@ describe('InvitePlayerToTeam', () => {
     )
 
     teamRepository.findById.mockResolvedValueOnce(
-      new Team(
-        'anyTeamId',
-        'anyTeamName',
-        'logoUrl',
-        new Player(
-          'anyPlayerId',
-          'anyEmail@gmail.com',
-          'hashedPassword',
-          'anyPixkey',
-          'anyGamerTag',
-          'anyPlatForm'
-        )
-      )
+      new Team('anyTeamId', 'anyTeamName', 'logoUrl', 'playerId')
     )
 
     sut = new InvitePlayerToTeam(

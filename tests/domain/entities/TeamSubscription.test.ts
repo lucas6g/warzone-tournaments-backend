@@ -1,6 +1,5 @@
 import { Game } from '@/domain/entities/Game'
 import { Payment } from '@/domain/entities/Payment'
-import { Player } from '@/domain/entities/Player'
 import { Team } from '@/domain/entities/Team'
 import { TeamPlayer } from '@/domain/entities/TeamPlayer'
 import { TeamSubscription } from '@/domain/entities/TeamSubscription'
@@ -17,7 +16,6 @@ describe('TeamSubscription', () => {
   let team: Team
   let tournament: Tournament
   let payment: Payment
-  let commomPlayer: Player
   let game: Game
 
   beforeAll(() => {
@@ -25,24 +23,8 @@ describe('TeamSubscription', () => {
   })
 
   beforeEach(() => {
-    const leader = new Player(
-      'anyId',
-      'anyEmail',
-      'anyPassword',
-      'anyPixkey',
-      'anyGamerTag',
-      'anyPlatForm'
-    )
-    team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo', leader)
+    team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo', 'leaderId')
 
-    commomPlayer = new Player(
-      'anyId',
-      'anyEmail',
-      'anyPassword',
-      'anyPixkey',
-      'anyGamerTag',
-      'anyPlatForm'
-    )
     jest.spyOn(team, 'getTotalPlayers').mockReturnValue(3)
 
     game = new Game('anyGameId', 'anyGameName', 'anyGameImage')
@@ -97,8 +79,8 @@ describe('TeamSubscription', () => {
     )
   })
   it('should not subscribe a Team to a Tournament if team member kd level is bigger than Tounament killDeathRatioLimit ', () => {
-    const player1 = new TeamPlayer(commomPlayer, 'anyTeamId', PlayerRole.COMMON)
-    const player2 = new TeamPlayer(commomPlayer, 'anyTeamId', PlayerRole.COMMON)
+    const player1 = new TeamPlayer('playerId', 'anyTeamId', PlayerRole.COMMON)
+    const player2 = new TeamPlayer('playerId', 'anyTeamId', PlayerRole.COMMON)
     player1.setKdLevel(2)
 
     jest.spyOn(team, 'getTeamPlayers').mockReturnValueOnce([player1, player2])

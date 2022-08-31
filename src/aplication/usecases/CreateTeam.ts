@@ -21,7 +21,7 @@ export class CreateTeam implements UseCase<Input, Output> {
     }
     const logoUrl = await this.fileStorage.upload(input.logo)
     const teamId = this.idGenerator.generate()
-    const team = new Team(teamId, input.name, logoUrl, player)
+    const team = new Team(teamId, input.name, logoUrl, player.getId())
     await this.teamRepository.save(team)
 
     return {

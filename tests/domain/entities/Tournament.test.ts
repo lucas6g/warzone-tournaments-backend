@@ -38,7 +38,7 @@ describe('Tournament', () => {
       'anyGamerTag',
       'anyPlatForm'
     )
-    team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo', player)
+    team = new Team('anyTeamId', 'anyTeamName', 'anyTeamLogo', player.getId())
 
     jest.spyOn(team, 'getTotalPlayers').mockReturnValue(3)
 
@@ -58,9 +58,9 @@ describe('Tournament', () => {
       TournamentType.TRIOS
     )
 
-    team1 = new Team('anyTeamId', 'faze', 'anyTeamLogo', player)
-    team2 = new Team('anyTeamId', 'los grandes', 'anyTeamLogo', player)
-    team3 = new Team('anyTeamId', 'zetas', 'anyTeamLogo', player)
+    team1 = new Team('anyTeamId', 'faze', 'anyTeamLogo', player.getId())
+    team2 = new Team('anyTeamId', 'los grandes', 'anyTeamLogo', player.getId())
+    team3 = new Team('anyTeamId', 'zetas', 'anyTeamLogo', player.getId())
     team1.addPlayer(player)
     team1.addPlayer(player)
     team2.addPlayer(player)

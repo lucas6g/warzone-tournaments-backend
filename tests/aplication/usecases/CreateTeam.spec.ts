@@ -112,19 +112,7 @@ describe('CreateTeam', () => {
     await sut.execute(input)
 
     expect(teamRepository.save).toHaveBeenCalledWith(
-      new Team(
-        'anyId',
-        'anyTeamName',
-        'logoUrl',
-        new Player(
-          'anyPlayerId',
-          'anyEmail@gmail.com',
-          'hashedPassword',
-          'anyPixkey',
-          'anyGamerTag',
-          'anyPlatForm'
-        )
-      )
+      new Team('anyId', 'anyTeamName', 'logoUrl', 'anyPlayerId')
     )
   })
 })
