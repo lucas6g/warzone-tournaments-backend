@@ -3,6 +3,7 @@ import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepo
 import { TeamInviteRepository } from '@/aplication/protocols/repositories/TeamInviteRepository'
 import { TeamRepository } from '@/aplication/protocols/repositories/TeamRepository'
 import { UseCase } from '@/aplication/protocols/UseCase'
+import { Team } from '@/domain/entities/Team'
 
 export class AcceptTeamInvite implements UseCase<Input, Output> {
   constructor (
@@ -29,6 +30,7 @@ export class AcceptTeamInvite implements UseCase<Input, Output> {
       team?.addPlayer(player)
     }
     await this.teamInviteRepository.delete(teamInvite)
+    await this.teamRepository.save(team as Team)
 
     return {
       status: teamInvite?.getStatus()

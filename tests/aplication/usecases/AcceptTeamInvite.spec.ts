@@ -3,6 +3,8 @@ import { PlayerRepository } from '@/aplication/protocols/repositories/PlayerRepo
 import { TeamInviteRepository } from '@/aplication/protocols/repositories/TeamInviteRepository'
 import { TeamRepository } from '@/aplication/protocols/repositories/TeamRepository'
 import { AcceptTeamInvite } from '@/aplication/usecases/AcceptTeamInvite'
+import { Player } from '@/domain/entities/Player'
+import { Team } from '@/domain/entities/Team'
 import { TeamInvite } from '@/domain/entities/TeamInvite'
 
 import { mock, MockProxy } from 'jest-mock-extended'
@@ -25,6 +27,20 @@ describe('AcceptTeamInvite', () => {
 
     teamInviteRepository.findById.mockResolvedValue(
       new TeamInvite('anyTeamInviteId', 'anyTeamId', 'anyPlayerId')
+    )
+
+    teamRepository.findById.mockResolvedValue(
+      new Team('anyId', 'anyTeamName', 'logoUrl', 'anyPlayerId')
+    )
+    playerRepository.findById.mockResolvedValue(
+      new Player(
+        'anyId',
+        'anyEmail@gmail.com',
+        'anyPassword',
+        'anyPixkey',
+        'anyGamerTag',
+        'anyPlatForm'
+      )
     )
   })
 
@@ -77,7 +93,7 @@ describe('AcceptTeamInvite', () => {
 
     expect(teamRepository.findById).toHaveBeenCalledWith('anyTeamId')
   })
-  it('should call TeamRepository delete method with correct teamInviteInstace', async () => {
+  it('should call TeamInviteRepository delete method with correct teamInviteInstace', async () => {
     const input = {
       teamInviteId: 'anyTeamInviteId'
     }
@@ -89,6 +105,35 @@ describe('AcceptTeamInvite', () => {
       playerId: 'anyPlayerId',
       status: 'accepted',
       teamId: 'anyTeamId'
+    })
+  })
+  it('should call TeamRepository save method with correct team instance', async () => {
+    const input = {
+      teamInviteId: 'anyTeamInviteId'
+    }
+
+    await sut.execute(input)
+
+    expect(teamRepository.save).toHaveBeenCalledWith({
+      id: 'anyId',
+      name: 'anyTeamName',
+      logo: 'logoUrl',
+      leaderId: 'anyPlayerId',
+      teamPlayers: [
+        {
+          playerId: 'anyPlayerId',
+          teamId: 'anyId',
+          role: 'LEADER',
+          kdLevel: 0
+        },
+        {
+          playerId: 'anyId',
+          teamId: 'anyId',
+          role: 'COMMON',
+          kdLevel: 0
+        }
+      ],
+      tournamentScores: []
     })
   })
 })
