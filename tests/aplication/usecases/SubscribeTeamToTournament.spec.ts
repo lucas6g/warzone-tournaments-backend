@@ -4,14 +4,14 @@ import { mock, MockProxy } from 'jest-mock-extended'
 
 describe('SubscribeTeamToTournament', () => {
   let tournamentRepository: MockProxy<TournamentRepository>
+  let sut: SubscribeTeamToTournament
 
   beforeEach(() => {
     tournamentRepository = mock<TournamentRepository>()
+    sut = new SubscribeTeamToTournament(tournamentRepository)
   })
 
   it('should subscribe a Team to a Tournament', async () => {
-    const sut = new SubscribeTeamToTournament(tournamentRepository)
-
     const input = {
       teamId: 'anyTeamId',
       tournamentId: 'anyTournamentId'
@@ -22,8 +22,6 @@ describe('SubscribeTeamToTournament', () => {
     expect(output.subscriptionPaymentStatus).toBe('PAID')
   })
   it('should call TounamentRespository findById method with correct tournamentId', async () => {
-    const sut = new SubscribeTeamToTournament(tournamentRepository)
-
     const input = {
       teamId: 'anyTeamId',
       tournamentId: 'anyTournamentId'
