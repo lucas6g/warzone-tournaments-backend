@@ -47,6 +47,10 @@ export class Tournament {
     return true
   }
 
+  getFee (): number {
+    return this.registrationCoust * this.type
+  }
+
   generateClassification (): TeamPlacement[] {
     const teamPlacements: TeamPlacement[] = []
     for (const [index, teamSubscription] of this.teamSubscriptions.entries()) {

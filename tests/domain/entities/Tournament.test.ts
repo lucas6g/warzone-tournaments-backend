@@ -233,4 +233,10 @@ describe('Tournament', () => {
       }
     ])
   })
+
+  it('should get tournament fee', () => {
+    const tournamentFee = sut.getFee()
+
+    expect(tournamentFee).toBe(15)
+  })
 })
