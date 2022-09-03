@@ -40,7 +40,12 @@ describe('TeamSubscription', () => {
       'anyMode',
       TournamentType.TRIOS
     )
-    payment = new Payment()
+    payment = new Payment(
+      'anyPaymentId',
+      15,
+      new Date('2022-07-15T14:00:00'),
+      'anyPayerId'
+    )
     jest.spyOn(payment, 'getStatus').mockReturnValue(PaymentStatus.PAID)
     sut = new TeamSubscription(tournament, team, payment)
   })
@@ -92,7 +97,7 @@ describe('TeamSubscription', () => {
     )
   })
   it('should not subscribe a Team to a Tournament if Payment status different of PAID ', () => {
-    jest.spyOn(payment, 'getStatus').mockReturnValueOnce(PaymentStatus.OPENED)
+    jest.spyOn(payment, 'getStatus').mockReturnValueOnce(PaymentStatus.OPEN)
     expect(() => new TeamSubscription(tournament, team, payment)).toThrow(
       new TeamSubscriptionError(
         'subscription denied tournoment fee was not paid'

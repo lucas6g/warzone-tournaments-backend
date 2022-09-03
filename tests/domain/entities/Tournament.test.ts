@@ -97,7 +97,12 @@ describe('Tournament', () => {
       new TournamentScore('anyId', sut.getId(), 10, PlacementPoints.EIGHTHPLACE)
     )
 
-    payment = new Payment()
+    payment = new Payment(
+      'anyPaymentId',
+      15,
+      new Date('2022-07-15T14:00:00'),
+      'anyPayerId'
+    )
     jest.spyOn(payment, 'getStatus').mockReturnValue(PaymentStatus.PAID)
     teamSubscription = new TeamSubscription(sut, team, payment)
   })
