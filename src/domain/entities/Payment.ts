@@ -6,7 +6,8 @@ export class Payment {
     private readonly id: string,
     private readonly amount: number,
     private readonly date: Date,
-    private readonly payerId: string
+    private readonly receiverId?: string,
+    private readonly payerId?: string
   ) {
     this.status = PaymentStatus.OPEN
   }
