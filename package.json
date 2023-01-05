@@ -1,9 +1,20 @@
 {
   "name": "warzone-tournaments-backend",
   "version": "0.0.1",
+  "description": "Professional API using Clean Architecture and TDD.",
   "main": "index.js",
   "keywords": [
-    "node"
+    "clean architecture",
+    "clean code",
+    "tdd",
+    "solid",
+    "design patterns",
+    "node",
+    "typescript",
+    "jest",
+    "typeorm",
+    "docker",
+    "ci/cd"
   ],
   "author": {
     "name": "Lucas Liduvino Santos",
@@ -15,8 +26,10 @@
     "build": "tsc -p tsconfig-build.json",
     "start": "node dist/main/server.js",
     "test": "jest --passWithNoTests --no-cache --runInBand",
-    "test:whatch": "yarn test -- --whatch",
-    "test:coverage": "yarn test -- --coverage"
+    "test:unit": "yarn test --config ./jest.unit.config.js",
+    "test:integration": "yarn test --config ./jest.integration.config.js",
+    "test:whatch": "yarn test --whatch",
+    "test:coverage": "yarn test --coverage"
   },
   "devDependencies": {
     "@types/jest": "^28.1.4",
@@ -29,10 +42,12 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "jest": "^28.1.2",
+    "jest-mock-extended": "^2.0.7",
     "ts-jest": "^28.0.5",
     "typescript": "^4.7.4"
   },
   "dependencies": {
+    "mockdate": "^3.0.5",
     "module-alias": "^2.2.2"
   }
 }

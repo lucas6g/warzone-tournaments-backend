@@ -1,5 +1,5 @@
 export enum PaymentStatus {
-  OPENED = 'OPENED',
+  OPEN = 'OPEN',
   CANCELLED = 'CANCELLED',
   PAID = 'PAID'
 }

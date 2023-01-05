@@ -11,14 +11,16 @@ export class Team {
     private readonly id: string,
     private readonly name: string,
     private readonly logo: string,
-    private readonly leader: Player
+    private readonly leaderId: string
   ) {
-    this.teamPlayers.push(new TeamPlayer(leader, this.id, PlayerRole.LEADER))
+    this.teamPlayers.push(new TeamPlayer(leaderId, this.id, PlayerRole.LEADER))
     this.tournamentScores = []
   }
 
   addPlayer (player: Player): void {
-    this.teamPlayers.push(new TeamPlayer(player, this.id, PlayerRole.COMMON))
+    this.teamPlayers.push(
+      new TeamPlayer(player.getId(), this.id, PlayerRole.COMMON)
+    )
   }
 
   addTournamentScore (tounamentScore: TournamentScore): void {
@@ -42,6 +44,14 @@ export class Team {
   }
 
   getLeaderId (): string {
-    return this.leader.getId()
+    return this.leaderId
+  }
+
+  getLogo (): string {
+    return this.logo
+  }
+
+  getName (): string {
+    return this.name
   }
 }

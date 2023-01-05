@@ -7,21 +7,7 @@ describe('Team', () => {
   let sut: Team
 
   beforeEach(() => {
-    sut = new Team(
-      'anyId',
-      'anyName',
-      'anyLogo',
-      new Player(
-        'leaderId',
-        'anyName',
-        'anyEmail',
-        'anyPassword',
-        1.2,
-        'anyPixkey',
-        'anyGamerTag',
-        'anyPlatForm'
-      )
-    )
+    sut = new Team('anyId', 'anyName', 'anyLogo', 'leaderId')
   })
 
   it('should create a Team with a leader', () => {
@@ -33,10 +19,8 @@ describe('Team', () => {
     sut.addPlayer(
       new Player(
         'leaderId',
-        'anyName',
         'anyEmail',
         'anyPassword',
-        1.2,
         'anyPixkey',
         'anyGamerTag',
         'anyPlatForm'
@@ -50,7 +34,6 @@ describe('Team', () => {
       new TournamentScore(
         'anyId',
         'tournomentId',
-        'teamId',
         PlacementPoints.FIRSTPLACE,
         22
       )
